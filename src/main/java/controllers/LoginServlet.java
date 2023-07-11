@@ -35,14 +35,14 @@ public class LoginServlet extends ServletPadre {
         }
 
         // Verifica le credenziali nel database
-        boolean checkLogin = false;
+        boolean checkLogin;
         try {
             checkLogin = checkCredentials(email, password);
         } catch (SQLException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failure in database credential verification");
             throw new RuntimeException(e);
         }
 
-        String path;
         if (checkLogin) {
             // Mostra la pagina di benvenuto
             HttpSession session = request.getSession();
@@ -54,13 +54,9 @@ public class LoginServlet extends ServletPadre {
             // mando la risposta
             response.getWriter().println(new Gson().toJson(email));
 
-            //path = getServletContext().getContextPath() + "/Home";
-            //response.sendRedirect(path);
         } else {
             // Mostra un messaggio di errore
-            error = "Email e/o password non validi.";
-            ctx.setVariable("error", error);
-            templateEngine.process("/index.html", ctx, response.getWriter());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Incorrect credentials");
         }
     }
 
