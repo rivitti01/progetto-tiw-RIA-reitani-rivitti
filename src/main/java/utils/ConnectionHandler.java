@@ -10,6 +10,9 @@ import javax.servlet.UnavailableException;
 
 public class ConnectionHandler {
 
+    public ConnectionHandler() {
+    }
+
     public static Connection getConnection(ServletContext context) throws UnavailableException {
         Connection connection = null;
         try {
@@ -20,12 +23,13 @@ public class ConnectionHandler {
             String password = context.getInitParameter("dbPassword");
             Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
+            return connection;
         } catch (ClassNotFoundException e) {
             throw new UnavailableException("Can't load database driver");
         } catch (SQLException e) {
             throw new UnavailableException("Couldn't get db connection");
         }
-        return connection;
+
     }
 
     public static void closeConnection(Connection connection) throws SQLException {

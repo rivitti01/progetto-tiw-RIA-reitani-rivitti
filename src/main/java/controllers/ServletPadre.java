@@ -15,23 +15,17 @@ public abstract class ServletPadre extends HttpServlet {
 
     protected static final long serialVersionUID = 1L;
     protected Connection connection = null;
-    protected TemplateEngine templateEngine;
 
     public void init() throws ServletException {
-        connection = ConnectionHandler.getConnection(getServletContext());
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
+        this.connection = ConnectionHandler.getConnection(this.getServletContext());
     }
 
     public void destroy() {
         try {
-            ConnectionHandler.closeConnection(connection);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            ConnectionHandler.closeConnection(this.connection);
+        } catch (SQLException var2) {
+            var2.printStackTrace();
         }
+
     }
 }

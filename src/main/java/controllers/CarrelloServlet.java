@@ -28,7 +28,7 @@ public class CarrelloServlet extends ServletPadre{
         HashMap<Integer, CarrelloFornitore> carrello = (HashMap<Integer, CarrelloFornitore>) session.getAttribute("carrello");
         ctx.setVariable("carrello", carrello);
 
-        templateEngine.process("WEB-INF/carrello.html", ctx, response.getWriter());
+        //templateEngine.process("WEB-INF/carrello.html", ctx, response.getWriter());
     }
 
 
