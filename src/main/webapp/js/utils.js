@@ -1,27 +1,17 @@
-// manda una richiesta http con metodo metodo, all'url url, fornendo il form form e specificando la callback callback
-function makeCall(metodo, url, form, callback, reset = true) {
-    // creo un oggetto HttpRequest
-    var richiesta = new XMLHttpRequest();
-
-    // definisco la callback da eseguire al termine della richiesta
-    richiesta.onreadystatechange = function() {
-        callback(richiesta)
-    };
-
-    // inizializzo la richiesta
-    richiesta.open(metodo, url);
-
-    // mando la richiesta
-    if( form != null )
-        richiesta.send(new FormData(form));
-    else
-        richiesta.send();
-
-    // se il form era stato riempito, lo ripristino
-    if( ( form !== null ) && ( reset === true ) )
-        form.reset();
-
-    // e poi verrà eseguita la callback
+function makeCall(method, url, formElement, cback, reset = true) {
+    var req = new XMLHttpRequest(); // visible by closure
+    req.onreadystatechange = function() {
+        cback(req)
+    }; // closure
+    req.open(method, url);
+    if (formElement == null) {
+        req.send();
+    } else {
+        req.send(new FormData(formElement));
+    }
+    if (formElement !== null && reset === true) {
+        formElement.reset();
+    }
 }
 
 // manda una richiesta http di POST, passando obj come parametro e specificando la callback callback

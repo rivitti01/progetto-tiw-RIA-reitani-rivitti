@@ -18,7 +18,7 @@
             if (form.checkValidity()){
                 //chiamo la servlet /login
                 makeCall("POST",'Login',form,function (response){
-                    if (response.readyState == XMLHttpRequest.DONE){
+                    if (response.readyState === XMLHttpRequest.DONE){
                         switch (response.status){
                             case 200 : //tutto apposto
                                 localStorage.setItem("user",response.responseText);
