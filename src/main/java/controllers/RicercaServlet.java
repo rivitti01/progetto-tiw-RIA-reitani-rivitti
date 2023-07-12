@@ -164,7 +164,7 @@ public class RicercaServlet extends ServletPadre {
         ctx.setVariable("carrello", carrello);
 
 
-        templateEngine.process("WEB-INF/risultati.html", ctx, response.getWriter());
+        //templateEngine.process("WEB-INF/risultati.html", ctx, response.getWriter());
 
     }
 

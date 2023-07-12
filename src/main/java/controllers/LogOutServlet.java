@@ -16,11 +16,16 @@ public class LogOutServlet extends ServletPadre{
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //invalidate the session
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         session.invalidate();
 
         //redirect the user to the index page
-        String path = getServletContext().getContextPath() + "/index.html";
+        String path = this.getServletContext().getContextPath() + "/index.html";
         response.sendRedirect(path);
     }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doGet(request, response);
+    }
 }
+//adattata dal progetto di fraternali
