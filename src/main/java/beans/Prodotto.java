@@ -8,6 +8,7 @@ public class Prodotto {
     private String categoria;
     private Blob foto;
     private String descrizione;
+    private String fotoBase64;
 
     public int getCodiceProdotto() {
         return codiceProdotto;
@@ -47,5 +48,13 @@ public class Prodotto {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public String getFotoBase64() {
+        return fotoBase64;
+    }
+
+    public void setFotoBase64(String fotoBase64) {
+        this.fotoBase64 = fotoBase64;
     }
 }

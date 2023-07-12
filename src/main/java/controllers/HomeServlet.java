@@ -2,6 +2,7 @@ package controllers;
 
 import beans.Prodotto;
 import beans.Visualizza;
+import com.google.gson.Gson;
 import dao.ProdottoDAO;
 import dao.VisualizzaDAO;
 import org.thymeleaf.context.WebContext;
@@ -29,29 +30,28 @@ public class HomeServlet extends ServletPadre {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Controlla se l'utente è già loggato, in caso positivo va direttamente alla home
         HttpSession session = request.getSession();
-        String basePath = getServletContext().getInitParameter("dbImages");
 
-
-        WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         String email = (String) session.getAttribute("email");
         List<Prodotto> products;
         try {
             products = getFiveProducts(email);
         } catch (SQLException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover products");
             throw new RuntimeException(e);
         }
-        Map<Integer,String> fotoMap = new LinkedHashMap<>();
         for (Prodotto prodotto : products){
             try {
-                fotoMap.put(prodotto.getCodiceProdotto(),Base64.getEncoder().encodeToString(prodotto.getFoto().getBytes(1, (int) prodotto.getFoto().length())));
+                prodotto.setFotoBase64(Base64.getEncoder().encodeToString(prodotto.getFoto().getBytes(1, (int) prodotto.getFoto().length())));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
 
-
-        ctx.setVariable("fotoMap", fotoMap);
-        ctx.setVariable("products", products);
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        // mando la risposta
+        response.getWriter().println(new Gson().toJson(products));
 
 
 
