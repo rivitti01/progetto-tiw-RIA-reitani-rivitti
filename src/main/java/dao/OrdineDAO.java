@@ -2,6 +2,7 @@ package dao;
 
 import beans.Informazioni;
 import beans.Ordine;
+import beans.OrdineConInformazioni;
 import beans.Prodotto;
 
 import javax.swing.*;
@@ -15,8 +16,8 @@ public class OrdineDAO {
         this.con = connection;
     }
 
-    public Map<Ordine,List<Informazioni>> getOrdersByEmail(String email) throws SQLException{
-        Map<Ordine,List<Informazioni>> prodottiPerOdine = new LinkedHashMap<>();
+    public List<OrdineConInformazioni> getOrdersByEmail(String email) throws SQLException{
+        List<OrdineConInformazioni> ordiniConInformazioni = new ArrayList<>();
         List<Ordine> ordini = new ArrayList<>();
         String query = "SELECT * FROM ordini WHERE email = ? ORDER BY codice_ordine DESC";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
@@ -40,11 +41,14 @@ public class OrdineDAO {
                         Informazioni informazione = mapRowToInformazione(result);
                         informazioni.add(informazione);
                     }
-                    prodottiPerOdine.put(ordine, informazioni);
+                    OrdineConInformazioni ordineConInformazioni = new OrdineConInformazioni();
+                    ordineConInformazioni.setOrdine(ordine);
+                    ordineConInformazioni.setInformazioni(informazioni);
+                    ordiniConInformazioni.add(ordineConInformazioni);
                 }
             }
         }
-        return prodottiPerOdine;
+        return ordiniConInformazioni;
     }
 
     public void createOrder(Ordine ordine) throws SQLException {

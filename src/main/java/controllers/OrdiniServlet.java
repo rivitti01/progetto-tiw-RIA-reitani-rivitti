@@ -2,7 +2,10 @@ package controllers;
 
 import beans.Informazioni;
 import beans.Ordine;
+import beans.OrdineConInformazioni;
 import beans.Prodotto;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dao.OrdineDAO;
 import org.thymeleaf.context.WebContext;
 
@@ -26,30 +29,30 @@ public class OrdiniServlet extends ServletPadre {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         String email = (String) session.getAttribute("email");
-        Map<Ordine,List<Informazioni>> ordini;
+        List<OrdineConInformazioni> ordini;
         try {
             ordini = getOrdini(email);
-            if (ordini == null) {
-                ctx.setVariable("error", "No orders found");
-                return;
-            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
         }
-        ctx.setVariable("ordini", ordini);
-        try {
-            //templateEngine.process("WEB-INF/ordini.html", ctx, response.getWriter());
-        }catch (Exception ex){
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
-        }
+
+        // creo un oggetto gson
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+        // scrivo la stringa in json
+        String json = gson.toJson(ordini);
+        // ritorno il risultato
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
 
     }
 
-    private Map<Ordine,List<Informazioni>> getOrdini(String email) throws SQLException {
+    private List<OrdineConInformazioni> getOrdini(String email) throws SQLException {
         OrdineDAO ordineDAO = new OrdineDAO(connection);
-        Map<Ordine,List<Informazioni>> ordini2 = ordineDAO.getOrdersByEmail(email);
+        List<OrdineConInformazioni> ordini2 = ordineDAO.getOrdersByEmail(email);
         return ordini2;
     }
 
