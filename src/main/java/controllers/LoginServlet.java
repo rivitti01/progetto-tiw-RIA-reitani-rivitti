@@ -56,7 +56,7 @@ public class LoginServlet extends ServletPadre {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             // mando la risposta
-            response.getWriter().println(new Gson().toJson(email));
+            response.getWriter().println(email);
 
         } else {
             // Mostra un messaggio di errore

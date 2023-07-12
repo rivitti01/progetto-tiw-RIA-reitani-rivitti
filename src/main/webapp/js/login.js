@@ -1,51 +1,32 @@
-(function (){
-    var form;
+(function() { // avoid variables ending up in the global scope
 
-    //se l'utente è ancora loggato, allora lo rimando alla pagina home
-    if(localStorage.getItem("utente") != null){
-        window.location.href = "home.html";
-    }
-    document.getElementById("errormessage").style.display = "none";
-
-    //altrimenti mando gli elementi del form al server
-        form = document.getElementById("formLogin");
-
-        //funzione di submit della form
-        form.addEventListener("submit", (e) =>{
-            //impedisco l'azione di default di submit
-            e.preventDefault();
-            //se la form è valida
-            if (form.checkValidity()){
-                //chiamo la servlet /login
-                makeCall("POST",'Login',form,function (response){
-                    if (response.readyState === XMLHttpRequest.DONE){
-                        switch (response.status){
-                            case 200 : //tutto apposto
-                                localStorage.setItem("user",response.responseText);
+    document.getElementById("submit").addEventListener('click', (e) => {
+        var form = e.target.closest("form");
+        if (form.checkValidity()) {
+            makeCall("POST", 'Login',e.target.closest("form"), function(x) {
+                    if (x.readyState == XMLHttpRequest.DONE) {
+                        var message = x.responseText;
+                        switch (x.status) {
+                            case 200:
+                                sessionStorage.setItem('email', message);
                                 window.location.href = "home.html";
                                 break;
-                            case 400: //errore client side
-                                document.getElementById("errormessage").style.display = "block";
-                                document.getElementById("errormessage").textContent = "Bad request";
+                            case 400: // bad request
+                                document.getElementById("errormessage").textContent = message;
                                 break;
                             case 401: // unauthorized
-                                document.getElementById("errormessage").style.display = "block";
-                                document.getElementById("errormessage").textContent = "Unauthorized";
+                                document.getElementById("errormessage").textContent = message;
                                 break;
-                            case 500: // brutto brutto server side
-                                document.getElementById("errormessage").style.display = "block";
-                                document.getElementById("errormessage").textContent = "Server error";
+                            case 500: // server error
+                                document.getElementById("errormessage").textContent = message;
                                 break;
                         }
                     }
-                });
-            }else {
-                //form non valido
-                form.reportValidity();
-            }
+                }
+            );
+        } else {
+            form.reportValidity();
+        }
+    });
 
-
-        });
-
-
-    })();
+})();

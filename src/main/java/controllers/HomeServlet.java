@@ -54,8 +54,7 @@ public class HomeServlet extends ServletPadre {
         ctx.setVariable("products", products);
 
 
-        // Passa i prodotti alla vista Thymeleaf
-        templateEngine.process("WEB-INF/home.html", ctx, response.getWriter());
+
     }
     private List<Prodotto> getFiveProducts(String email) throws SQLException {
         VisualizzaDAO visualizzaDAO = new VisualizzaDAO(connection);
