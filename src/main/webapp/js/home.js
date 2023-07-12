@@ -199,67 +199,70 @@ sessionStorage.clear();
             // aggiungo il div che conterrà gli ordini
             let divRisultati = document.createElement('div');
             divRisultati.classList.add("risultati");
-            this.container.appendChild(divRisultati);
+            h2.appendChild(divRisultati);
 
             // aggiungo la lista di ordini
             let listview = document.createElement('ul');
             listview.classList.add("listview");
             divRisultati.appendChild(listview);
 
+            //aggiungo la tabella con gli ordini
+            let table = document.createElement('table');
+            listview.appendChild(table);
+            let tableHead = document.createElement('thead');
+            table.appendChild(tableHead);
+            let tableHeaderRow = document.createElement('tr');
+            tableHead.appendChild(tableHeaderRow);
+            //do il nome alle colonne
+            let nomiColonneP = ['Codice ordine','Nome fornitore','Data spedizione','Prezzo totale','indirizzo di spedizione'];
+            for( let i=0; i<nomiColonneP.length; i++ ){
+                let th = document.createElement('th');
+                th.textContent = nomiColonneP[i];
+                tableHeaderRow.appendChild(th);
+            }
+            // aggiungo il corpo della tabella
+            let tableBody = document.createElement('tbody');
+            table.appendChild(tableBody);
+
             // per ogni ordine, aggiungo un elemento alla lista
             ordini.forEach( (o) => {
-                // aggiungo un elemento alla lista
-                let li = document.createElement('li');
-                listview.appendChild(li);
-                li.classList.add('listview-row');
 
-                // mostro l'id dell'ordine
-                let h3 = document.createElement('h3');
-                li.appendChild(h3);
-                h3.textContent = o.ordine.codiceOrdine;
-                // il nome del fornitore
-                let pFornitore = document.createElement('p');
-                li.appendChild(pFornitore);
-                pFornitore.textContent = o.ordine.nomeFornitore;
-                // l'eventuale data di spedizione
-                let pDataSpedizione = document.createElement('p');
-                li.appendChild(pDataSpedizione);
-                pDataSpedizione.textContent = o.ordine.dataSpedizione;
-                // l'indirizzo di spedizione
-                let pIndirizzo = document.createElement('p');
-                li.appendChild(pIndirizzo);
-                pIndirizzo.textContent = o.ordine.indirizzoSpedizione;
-                // il totale in € senza spese di spedizione
-                let pTotale = document.createElement('p');
-                li.appendChild(pTotale);
-                pTotale.textContent = o.ordine.prezzoTotale.toFixed(2) + ' €';
-                // le spese di spedizione
-                let pSpeseSpedizione = document.createElement('p');
-                li.appendChild(pSpeseSpedizione);
-                pSpeseSpedizione.textContent = '0';
+                // aggiungo una riga per l'ordine alla tabella
+                let rigaOrdine = document.createElement('tr');
+                tableBody.appendChild(rigaOrdine);
+                // aggiungo il codice ordine alla riga
+                let tdCodiceOrdine = document.createElement('td');
+                tdCodiceOrdine.textContent =o.ordine.codiceOrdine;
+                rigaOrdine.appendChild(tdCodiceOrdine);
+                // aggiungo la quantità alla riga
+                let tdNomeFornitore = document.createElement('td');
+                tdNomeFornitore.textContent = o.ordine.nomeFornitore
+                rigaOrdine.appendChild(tdNomeFornitore);
+                // aggiungo la data di spedizione alla riga
+                let tdDataSpedizione = document.createElement('td');
+                tdDataSpedizione.textContent = o.ordine.dataSpedizione;
+                rigaOrdine.appendChild(tdDataSpedizione);
+                // aggiungo il prezzo totale alla riga
+                let tdPrezzoTotale = document.createElement('td');
+                tdPrezzoTotale.textContent = o.ordine.prezzoTotale;
+                rigaOrdine.appendChild(tdPrezzoTotale);
+                // aggiungo l'indirizzo di spedizione alla riga
+                let tdIndirizzoSpedizione = document.createElement('td');
+                tdIndirizzoSpedizione.textContent = o.ordine.indirizzoSpedizione;
+                rigaOrdine.appendChild(tdIndirizzoSpedizione);
 
-                // aggiungo il titolo "prodotti"
-                let titoloProdotti = document.createElement('h3');
-                titoloProdotti.textContent = "Prodotti";
-                li.appendChild(titoloProdotti);
-                // e aggiungo la tabella con le informazioni per ogni prodotto
-                let table = document.createElement('table');
-                li.appendChild(table);
-                let tableHead = document.createElement('thead');
-                table.appendChild(tableHead);
-                let tableHeaderRow = document.createElement('tr');
-                tableHead.appendChild(tableHeaderRow);
+                // creo una riga per il nome delle informazioni
+                let rigaInformazioni = document.createElement('tr');
+                tableBody.appendChild(rigaInformazioni);
                 // creo una colonna per ogni informazione necessaria
-                let nomiColonne = ['Nome Prodotto','Prezzo Unitario','Quantità ordinata'];
-                for( let i=0; i<nomiColonne.length; i++ ){
-                    let th = document.createElement('th');
-                    th.textContent = nomiColonne[i];
-                    tableHeaderRow.appendChild(th);
+                let nomiColonneP = ['Prodotti:','Quantità:'];
+                for( let i=0; i<nomiColonneP.length; i++ ){
+                    let td = document.createElement('td');
+                    td.textContent = nomiColonneP[i];
+                    rigaInformazioni.appendChild(td);
                 }
-                // aggiungo il corpo della tabella
-                let tableBody = document.createElement('tbody');
-                table.appendChild(tableBody);
-                // e per ogni prodotto nell'ordine aggiungo una riga
+
+                // gestisco i prodotti in ogni ordine
                 o.informazioni.forEach( (i) => {
                     // aggiungo una riga alla tabella
                     let rigaProdotto = document.createElement('tr');
@@ -268,10 +271,6 @@ sessionStorage.clear();
                     let tdNome = document.createElement('td');
                     tdNome.textContent = i.nome;
                     rigaProdotto.appendChild(tdNome);
-                    // aggiungo il prezzo alla riga
-                    let tdPrezzo = document.createElement('td');
-                    tdPrezzo.textContent = i.prezzoUnitario.toFixed(2) + " €";
-                    rigaProdotto.appendChild(tdPrezzo);
                     // aggiungo la quantita alla riga
                     let tdQuantita = document.createElement('td');
                     tdQuantita.textContent = i.quantità;
