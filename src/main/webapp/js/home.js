@@ -4,41 +4,21 @@
     /************************************************************************************/
 
     // dichiaro il pageOrchestrator e le variabili che conterranno i componenti della pagina
-    let home, search, carrello, ordini;
+    let home, ricerca, carrello, ordini;
     let pageOrchestrator = new PageOrchestrator();
 
     /************************************************************************************/
 
-    // se quando la pagina carica per la prima volta non sono loggato chiamo logout, altrimenti visualizzo la home
+    // se quando la pagina carica non sono loggato chiamo logout, altrimenti visualizzo la home
     window.addEventListener('load', function(){
         pageOrchestrator.start();
-        if( localStorage.getItem("utente") == null )
+        if( sessionStorage.getItem("email") == null )
             logout()
         else
-            home.show();
+            pageOrchestrator.showHome();
     } );
 
     /************************************************************************************/
-
-    //#####MAPPIAMO LE FUNZIONI AI BOTTONI#####
-
-    // aggiungo la funzione al click del bottone di logout
-    document.getElementById("logout").addEventListener("click", function(){
-        logout();
-    });
-
-    document.getElementById("home").addEventListener("click", function(){
-        this.container = document.getElementById("container");
-        home = new Home(this.container);
-        home.show();
-    });
-
-    document.getElementById('ordini').onclick = function(){
-        ordini = new Ordini(document.getElementById('container'));
-        ordini.show();
-    };
-
-
 
     //#####DICHIARIAMO LE FUNZIONI#####
 
@@ -67,32 +47,32 @@
             // creo un oggetto-pagina Home
             home = new Home(this.container);
             // creo un oggetto-funzionalità Search
-            search = new Search(this.container);
+            ricerca = new Ricerca(this.container);
             // creo un oggetto-pagina Carrello
-            carrello = new Carrello(this.container);
+            //carrello = new Carrello(this.container);
             // creo un oggetto-funzionalità Ordine
             ordini = new Ordini(this.container);
 
             // assegno al bottone carrello la funzione
-            document.getElementById('aCarrello').onclick = function(){
+            document.getElementById('carrello').onclick = function(){
                 self.hide();
                 self.showCarrello();
             };
 
             // assegno al bottone ordini la funzione
-            document.getElementById('aOrdini').onclick = function(){
+            document.getElementById('ordini').onclick = function(){
                 self.hide();
                 self.showOrdini();
             };
 
             // assegno al bottone Home la funzione
-            document.getElementById('aHome').onclick = function(){
+            document.getElementById('home').onclick = function(){
                 self.hide();
                 self.showHome();
             };
 
             // aggiungo la funzione al click del bottone di logout
-            document.getElementById("btnLogout").addEventListener("click", function(){
+            document.getElementById("logout").addEventListener("click", function(){
                 logout();
             });
 
@@ -108,7 +88,7 @@
         // mostro la home
         this.showHome = function(){
             this.hide();
-            if( localStorage.getItem("utente") == null )
+            if( sessionStorage.getItem("email") == null )
                 logout();
             else
                 home.show();
@@ -117,7 +97,7 @@
         // mostro il carrello
         this.showCarrello = function(){
             this.hide();
-            if( localStorage.getItem("utente") == null )
+            if( sessionStorage.getItem("email") == null )
                 logout();
             else
                 carrello.show();
@@ -126,7 +106,7 @@
         // mostro gli ordini
         this.showOrdini = function(){
             this.hide();
-            if( localStorage.getItem("utente") == null )
+            if( sessionStorage.getItem("email") == null )
                 logout();
             else
                 ordini.show();
