@@ -22,6 +22,26 @@ sessionStorage.clear();
 
     //#####DICHIARIAMO LE FUNZIONI#####
 
+    //logout
+    function logout() {
+        makeCall("GET", 'Logout', null, function (risposta) {
+            if (risposta.readyState === XMLHttpRequest.DONE) {
+                sessionStorage.clear();
+                window.location.href = "index.html";
+            }
+        });
+    }
+
+    this.showOrdini = function(){
+        this.hide();
+        if( localStorage.getItem("utente") == null )
+            logout();
+        else
+            ordini.show();
+    }
+
+    /************************************************************************************/
+
     //home
     function Home(container) {
         this.container = container;
@@ -31,6 +51,25 @@ sessionStorage.clear();
             //aggiungere la
 
             //barra di ricerca
+            let divSearch = document.querySelector('.searchForm');
+            if( !divSearch ){
+                divSearch = document.createElement('div');
+                divSearch.classList.add("searchForm");
+                document.getElementById("menuBar").insertBefore(divSearch,null);
+                let formSearch = document.createElement('form');
+                formSearch.action = "#";
+                formSearch.id = "formRisultati";
+                divSearch.appendChild(formSearch);
+                let inputSearch = document.createElement('input');
+                inputSearch.type = "text";
+                inputSearch.placeholder = "Cerca...";
+                inputSearch.name = "queryString";
+                inputSearch.required = true;
+                formSearch.appendChild(inputSearch);
+                // in caso di invio, chiamo il metodo cerca
+                formSearch.addEventListener("submit", search.cerca);
+            }
+
 
             makeCall("GET","Home",null, function (risposta){
                 if (risposta.readyState == XMLHttpRequest.DONE) {
@@ -66,72 +105,65 @@ sessionStorage.clear();
                     alert("Non ci sono prodotti disponibili");
                     return;
                 }else {
-                    let divTitolo = document.createElement("div");
-                    container.className = "centered-row";
-                    this.container.appendChild(divTitolo);
 
                     let titoloh1 = document.createElement("h1");
                     titoloh1.textContent = "Potrebbero interessarti!";
-                    divTitolo.appendChild(titoloh1);
+                    this.container.appendChild(titoloh1);
 
                     let divContainer = document.createElement('div');
                     divContainer.classList.add("card-container");
                     this.container.appendChild(divContainer);
 
-                    for( let i=0; i<prodotti.length; i++ ){
-                        let card = document.createElement('div');
-                        card.classList.add("card");
-                        divContainer.appendChild(card);
-
-                        // ci metto dentro l'immagine
-                        let img = document.createElement('img');
-                        img.src = 'data:image/jpg;base64,' + prodotti[i].fotoBase64;
-                        img.classList.add('card-img-top');
-                        card.appendChild(img);
-
-                        // e riempio il body
-                        /*let cardBody = document.createElement('div');
-                        cardBody.classList.add("card-body");
-                        card.appendChild(cardBody);*/
-                        // e nome
-                        let nomeParag = document.createElement('p');
-                        nomeParag.textContent = "Nome Prodotto: " + prodotti[i].nomeProdotto;
-                        card.appendChild(nomeParag);
-
-                        let categoria = document.createElement('p');
-                        nomeParag.textContent = "Categoria: " + prodotti[i].categoria;
-                        card.appendChild(categoria);
-
-                        let descrizione = document.createElement('p');
-                        nomeParag.textContent = "Descrizione: " + prodotti[i].descrizione;
-                        card.appendChild(descrizione);
-
+                    //aggiungo la tabella con gli ordini
+                    let table = document.createElement('table');
+                    divContainer.appendChild(table);
+                    let tableHead = document.createElement('thead');
+                    table.appendChild(tableHead);
+                    let tableHeaderRow = document.createElement('tr');
+                    tableHead.appendChild(tableHeaderRow);
+                    //do il nome alle colonne
+                    let nomiColonneP = ['Foto','Nome','Categoria','Descrizione'];
+                    for( let i=0; i<nomiColonneP.length; i++ ){
+                        let th = document.createElement('th');
+                        th.textContent = nomiColonneP[i];
+                        tableHeaderRow.appendChild(th);
                     }
+                    // aggiungo il corpo della tabella
+                    let tableBody = document.createElement('tbody');
+                    table.appendChild(tableBody);
+
+                    prodotti.forEach( (p) => {
+
+                        //creo la riga
+                        let tr = document.createElement('tr');
+                        tableBody.appendChild(tr);
+                        //inserisco l'immagine
+                        let img = document.createElement('img');
+                        img.src = 'data:image/jpg;base64,' + p.fotoBase64;
+                        img.classList.add('card-img-top');
+                        tr.appendChild(img);
+                        //inserisco il nome
+                        let tdNome = document.createElement('td');
+                        tdNome.textContent = p.nomeProdotto;
+                        tr.appendChild(tdNome);
+                        //inserisco la categoria
+                        let tdCategoria = document.createElement('td');
+                        tdCategoria.textContent = p.categoria;
+                        tr.appendChild(tdCategoria);
+                        //inserisco la descrizione
+                        let tdDescrizione = document.createElement('td');
+                        tdDescrizione.textContent = p.descrizione;
+                        tr.appendChild(tdDescrizione);
+                    })
+
                 }
             }
         }
     }
 
-    //logout
-    function logout() {
-        makeCall("GET", 'Logout', null, function (risposta) {
-            if (risposta.readyState === XMLHttpRequest.DONE) {
-                sessionStorage.clear();
-                window.location.href = "index.html";
-            }
-        });
-    }
-
-    this.showOrdini = function(){
-        this.hide();
-        if( localStorage.getItem("utente") == null )
-            logout();
-        else
-            ordini.show();
-    }
-
     /************************************************************************************/
 
+    //ordini
     function Ordini(container){
         this.container = container;
 
