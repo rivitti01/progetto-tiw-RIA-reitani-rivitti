@@ -118,6 +118,8 @@
     //home
     function Home(container) {
         this.container = container;
+
+        // metodo che visualizza i prodotti
         this.show = function(){
             container.innerHTML = "";
             let self = this;
@@ -359,6 +361,52 @@
                 tdPrezzoMinimo.textContent = r.prezzo;
                 tr.appendChild(tdPrezzoMinimo);
             })
+
+            //aggiungo se necessario il bottone per tornare alla pagina precedente
+            if(posizione>0){
+                let formPrecedente = document.createElement('form');
+                formPrecedente.id = "formPrecedente";
+                formPrecedente.action = "#";
+                tableBody.appendChild(formPrecedente);
+                let inputPrecedente = document.createElement('input');
+                inputPrecedente.type = "hidden";
+                inputPrecedente.name = "word";
+                inputPrecedente.value = word;
+                formPrecedente.appendChild(inputPrecedente);
+                let inputPrecedente2 = document.createElement('input');
+                inputPrecedente2.type = "hidden";
+                inputPrecedente2.name = "posizione";
+                inputPrecedente2.value = (-5+parseInt(posizione));
+                formPrecedente.appendChild(inputPrecedente2);
+                let btnPrecedente = document.createElement('button');
+                btnPrecedente.type = "submit";
+                btnPrecedente.textContent = "Pagina precedente";
+                formPrecedente.appendChild(btnPrecedente);
+                formPrecedente.addEventListener('submit', ricerca.cerca);
+            }
+
+            //aggiungo se necessario il bottone per andare alla pagina successiva
+            if(!paginaRisultati.ultimaPagina){
+                let formSuccessiva = document.createElement('form');
+                formSuccessiva.id = "formPrecedente";
+                formSuccessiva.action = "#";
+                tableBody.appendChild(formSuccessiva);
+                let inputPrecedente = document.createElement('input');
+                inputPrecedente.type = "hidden";
+                inputPrecedente.name = "word";
+                inputPrecedente.value = word;
+                formSuccessiva.appendChild(inputPrecedente);
+                let inputPrecedente2 = document.createElement('input');
+                inputPrecedente2.type = "hidden";
+                inputPrecedente2.name = "posizione";
+                inputPrecedente2.value = (+5+parseInt(posizione));
+                formSuccessiva.appendChild(inputPrecedente2);
+                let btnPrecedente = document.createElement('button');
+                btnPrecedente.type = "submit";
+                btnPrecedente.textContent = "Pagina successiva";
+                formSuccessiva.appendChild(btnPrecedente);
+                formSuccessiva.addEventListener('submit', ricerca.cerca);
+            }
 
             ////////
 
