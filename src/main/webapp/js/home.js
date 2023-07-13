@@ -1,8 +1,25 @@
-sessionStorage.clear();
+
 
 {
-    let ordini;
-    let home;
+    /************************************************************************************/
+
+    // dichiaro il pageOrchestrator e le variabili che conterranno i componenti della pagina
+    let home, search, carrello, ordini;
+    let pageOrchestrator = new PageOrchestrator();
+
+    /************************************************************************************/
+
+    // se quando la pagina carica per la prima volta non sono loggato chiamo logout, altrimenti visualizzo la home
+    window.addEventListener('load', function(){
+        pageOrchestrator.start();
+        if( localStorage.getItem("utente") == null )
+            logout()
+        else
+            home.show();
+    } );
+
+    /************************************************************************************/
+
     //#####MAPPIAMO LE FUNZIONI AI BOTTONI#####
 
     // aggiungo la funzione al click del bottone di logout
@@ -35,12 +52,85 @@ sessionStorage.clear();
         });
     }
 
-    this.showOrdini = function(){
-        this.hide();
-        if( localStorage.getItem("utente") == null )
-            logout();
-        else
-            ordini.show();
+    /************************************************************************************/
+
+    function PageOrchestrator(){
+
+        // prendo il container della pagina
+        this.container = document.getElementById('container');
+
+        // metodo che inizializza l'oggetto
+        this.start = function(){
+            // salvo this in self per colpa della visibilità di js
+            const self = this;
+
+            // creo un oggetto-pagina Home
+            home = new Home(this.container);
+            // creo un oggetto-funzionalità Search
+            search = new Search(this.container);
+            // creo un oggetto-pagina Carrello
+            carrello = new Carrello(this.container);
+            // creo un oggetto-funzionalità Ordine
+            ordini = new Ordini(this.container);
+
+            // assegno al bottone carrello la funzione
+            document.getElementById('aCarrello').onclick = function(){
+                self.hide();
+                self.showCarrello();
+            };
+
+            // assegno al bottone ordini la funzione
+            document.getElementById('aOrdini').onclick = function(){
+                self.hide();
+                self.showOrdini();
+            };
+
+            // assegno al bottone Home la funzione
+            document.getElementById('aHome').onclick = function(){
+                self.hide();
+                self.showHome();
+            };
+
+            // aggiungo la funzione al click del bottone di logout
+            document.getElementById("btnLogout").addEventListener("click", function(){
+                logout();
+            });
+
+            // svuoto la pagina
+            self.hide();
+        }
+
+        // svuoto la pagina
+        this.hide = function(){
+            this.container.innerHTML = "";
+        }
+
+        // mostro la home
+        this.showHome = function(){
+            this.hide();
+            if( localStorage.getItem("utente") == null )
+                logout();
+            else
+                home.show();
+        }
+
+        // mostro il carrello
+        this.showCarrello = function(){
+            this.hide();
+            if( localStorage.getItem("utente") == null )
+                logout();
+            else
+                carrello.show();
+        }
+
+        // mostro gli ordini
+        this.showOrdini = function(){
+            this.hide();
+            if( localStorage.getItem("utente") == null )
+                logout();
+            else
+                ordini.show();
+        }
     }
 
     /************************************************************************************/
