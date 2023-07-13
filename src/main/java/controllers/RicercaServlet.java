@@ -2,10 +2,9 @@ package controllers;
 
 import javax.servlet.annotation.WebServlet;
 
-import beans.CarrelloFornitore;
-import beans.Fasce;
-import beans.Fornitore;
-import beans.Prodotto;
+import beans.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dao.*;
 import org.thymeleaf.context.WebContext;
 import utils.Risultato;
@@ -112,6 +111,8 @@ public class RicercaServlet extends ServletPadre {
             }
         }
 
+        PaginaRisultati paginaRisultati = new PaginaRisultati();
+
         //crea le mappe per la visualizzazione dei risultati
         ProdottoDAO prodottoDAO = new ProdottoDAO(connection);
         FasceDAO fasceDAO = new FasceDAO(connection);
@@ -162,6 +163,19 @@ public class RicercaServlet extends ServletPadre {
             carrello = new HashMap<Integer, CarrelloFornitore>();
         }
         ctx.setVariable("carrello", carrello);
+
+        paginaRisultati.setRisultati(risultati);
+        paginaRisultati.setUltimaPagina(isLastPage);
+
+        // creo un oggetto gson
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+        // scrivo la stringa in json
+        String json = gson.toJson(paginaRisultati);
+        // ritorno il risultato
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
 
 
         //templateEngine.process("WEB-INF/risultati.html", ctx, response.getWriter());
