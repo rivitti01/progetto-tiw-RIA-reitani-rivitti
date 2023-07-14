@@ -348,11 +348,36 @@
                 //creo la riga
                 let tr = document.createElement('tr');
                 tableBody.appendChild(tr);
-                //inserisco il codice del prodotto
+
+                //inserisco il codice del prodotto come bottone per espandere
                 let tdCodice = document.createElement('td');
-                tdCodice.textContent = r.prodotto.codiceProdotto;
                 tr.appendChild(tdCodice);
-                //inserisco la categoria
+                let formEspandi = document.createElement('form');
+                formEspandi.id = "formEspandi";
+                formEspandi.action = "#";
+                tdCodice.appendChild(formEspandi);
+                let inputEspandi = document.createElement('input');
+                inputEspandi.type = "hidden";
+                inputEspandi.name = "codiceProdotto";
+                inputEspandi.value = r.prodotto.codiceProdotto;
+                formEspandi.appendChild(inputEspandi);
+                let inputEspandi2 = document.createElement('input');
+                inputEspandi2.type = "hidden";
+                inputEspandi2.name = "word";
+                inputEspandi2.value = word;
+                formEspandi.appendChild(inputEspandi2);
+                let inputEspandi3 = document.createElement('input');
+                inputEspandi3.type = "hidden";
+                inputEspandi3.name = "posizione";
+                inputEspandi3.value = posizione;
+                formEspandi.appendChild(inputEspandi3);
+                let bottoneEspandi = document.createElement('button');
+                bottoneEspandi.type = "submit";
+                bottoneEspandi.textContent = r.prodotto.codiceProdotto;
+                formEspandi.appendChild(bottoneEspandi);
+                bottoneEspandi.addEventListener('click', self.espandi);
+
+                //inserisco il nome del prodotto
                 let tdNome = document.createElement('td');
                 tdNome.textContent = r.prodotto.nomeProdotto;
                 tr.appendChild(tdNome);
