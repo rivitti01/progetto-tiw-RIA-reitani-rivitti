@@ -1,11 +1,15 @@
 package beans;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Fornitore {
     private int codiceFornitore;
     private String nomeFornitore;
     private int valutazione;
     private int soglia;
     private int spedizioneMin;
+    private List<Fasce> fasce = new ArrayList<Fasce>();
 
     public int getCodiceFornitore() {
         return codiceFornitore;

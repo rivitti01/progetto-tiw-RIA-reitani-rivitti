@@ -350,15 +350,15 @@
                 tableBody.appendChild(tr);
                 //inserisco il codice del prodotto
                 let tdCodice = document.createElement('td');
-                tdCodice.textContent = r.codiceProdotto;
+                tdCodice.textContent = r.prodotto.codiceProdotto;
                 tr.appendChild(tdCodice);
                 //inserisco la categoria
                 let tdNome = document.createElement('td');
-                tdNome.textContent = r.nomeProdotto;
+                tdNome.textContent = r.prodotto.nomeProdotto;
                 tr.appendChild(tdNome);
                 //inserisco il prezzo minimo
                 let tdPrezzoMinimo = document.createElement('td');
-                tdPrezzoMinimo.textContent = r.prezzo;
+                tdPrezzoMinimo.textContent = r.prezzoMin;
                 tr.appendChild(tdPrezzoMinimo);
             })
 

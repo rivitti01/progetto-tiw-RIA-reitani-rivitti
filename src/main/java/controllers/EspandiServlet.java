@@ -1,7 +1,7 @@
 package controllers;
 
 import dao.*;
-import utils.Risultato;
+import beans.Risultato;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -88,7 +88,7 @@ public class EspandiServlet extends ServletPadre{
             response.getWriter().println("Errore nel caricamento dei risultati");
             return;
         }
-
+/*
         //controlla che il codice del prodotto da espandere sia attinente alla ricerca
         if(risultati.stream().filter(x -> x.getCodiceProdotto() == codiceProdottoDaEspandere).count() == 0){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -137,7 +137,7 @@ public class EspandiServlet extends ServletPadre{
         }
 
         response.sendRedirect(path);
-
+*/
     }
 
 }

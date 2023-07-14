@@ -1,13 +1,11 @@
 package beans;
 
-import utils.Risultato;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class PaginaRisultati {
 
-    List<Risultato> risultati = new ArrayList<Risultato>();
+    private List<Risultato> risultati = new ArrayList<Risultato>();
     boolean ultimaPagina = false;
 
     public List<Risultato> getRisultati() {

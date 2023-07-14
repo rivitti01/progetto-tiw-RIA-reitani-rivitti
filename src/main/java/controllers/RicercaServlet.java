@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dao.*;
 import org.thymeleaf.context.WebContext;
-import utils.Risultato;
+import beans.Risultato;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -86,9 +86,11 @@ public class RicercaServlet extends ServletPadre {
             return;
         }
 
+
+
         //verifica che i codici prodotto da espandere siano effettivamente presenti nella ricerca
         for(Integer codice : codiciDaEspndere){
-            if(risultati.stream().filter(r -> r.getCodiceProdotto() == codice).count() == 0) {
+            if(risultati.stream().filter(r -> r.getProdotto().getCodiceProdotto() == codice).count() == 0) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "il codice prodotto non è valido");
                 return;
             }
@@ -103,15 +105,19 @@ public class RicercaServlet extends ServletPadre {
             isLastPage = true;
         }
         ctx.setVariable("isLastPage", isLastPage);
+        PaginaRisultati paginaRisultati = new PaginaRisultati();
+        paginaRisultati.setUltimaPagina(isLastPage);
+
+        //inserisco i risultati nella pagina
+        paginaRisultati.setRisultati(risultati);
 
         //setta gli attributi per la visualizzazione dei risultati
         for(Risultato r : risultati){
-            if(codiciDaEspndere.contains(r.getCodiceProdotto())){
+            if(codiciDaEspndere.contains(r.getProdotto().getCodiceProdotto())){
                 r.setEspandere(true);
             }
         }
 
-        PaginaRisultati paginaRisultati = new PaginaRisultati();
 
         //crea le mappe per la visualizzazione dei risultati
         ProdottoDAO prodottoDAO = new ProdottoDAO(connection);
@@ -127,7 +133,7 @@ public class RicercaServlet extends ServletPadre {
         for(Risultato r : risultati){
             if (r.isEspandere()){
                 try {
-                    Prodotto p = prodottoDAO.getInformation(r.getCodiceProdotto());
+                    Prodotto p = prodottoDAO.getInformation(r.getProdotto().getCodiceProdotto());
                     fotoMap.put(p.getCodiceProdotto(), Base64.getEncoder().encodeToString(p.getFoto().getBytes(1, (int) p.getFoto().length())));
                     List<Fornitore> fornitori = vendeDAO.getFornitori(p.getCodiceProdotto());
                     for (Fornitore f : fornitori){
@@ -135,7 +141,7 @@ public class RicercaServlet extends ServletPadre {
                         List<Fasce> fasce = fasceDAO.getFasce(f.getCodiceFornitore());
                         fasceMap.put(f, fasce);
 
-                        float prezzoUnitario = vendeDAO.getPrice(r.getCodiceProdotto(), f.getCodiceFornitore());
+                        float prezzoUnitario = vendeDAO.getPrice(r.getProdotto().getCodiceProdotto(), f.getCodiceFornitore());
                         ausiliariaMap.put(r, prezzoUnitario);
                         prezzoUnitarioMap.put(f , ausiliariaMap);
                     }
@@ -164,8 +170,7 @@ public class RicercaServlet extends ServletPadre {
         }
         ctx.setVariable("carrello", carrello);
 
-        paginaRisultati.setRisultati(risultati);
-        paginaRisultati.setUltimaPagina(isLastPage);
+
 
         // creo un oggetto gson
         Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();

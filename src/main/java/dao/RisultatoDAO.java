@@ -1,7 +1,7 @@
 package dao;
 
 import beans.Prodotto;
-import utils.Risultato;
+import beans.Risultato;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,8 +19,8 @@ public class RisultatoDAO {
 
     public List<Risultato> searchByWord (String word, int posizione) throws SQLException {
         List<Risultato> risultati = new ArrayList<>();
-        String query = "SELECT vende.codice_prodotto,nome_prodotto, prezzo, sconto " +
-                "FROM vende JOIN (SELECT codice_prodotto, nome_prodotto FROM prodotto WHERE nome_prodotto LIKE ? OR descrizione LIKE ?) as p " +
+        String query = "SELECT vende.codice_prodotto,nome_prodotto, prezzo, sconto, foto, categoria, descrizione " +
+                "FROM vende JOIN (SELECT * FROM prodotto WHERE nome_prodotto LIKE ? OR descrizione LIKE ?) as p " +
                 "on vende.codice_prodotto = p.codice_prodotto " +
                 "WHERE prezzo = (SELECT MIN(prezzo) FROM vende WHERE codice_prodotto = p.codice_prodotto) ORDER BY prezzo ASC limit 6 offset ? ";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -30,9 +30,14 @@ public class RisultatoDAO {
             try (ResultSet result = pstatement.executeQuery();) {
                 while (result.next()) {
                     Risultato risultato = new Risultato();
-                    risultato.setCodiceProdotto(result.getInt("codice_prodotto"));
-                    risultato.setNomeProdotto(result.getString("nome_prodotto"));
-                    risultato.setPrezzo(result.getInt("prezzo")*(1-result.getFloat("sconto")));
+                    Prodotto prodotto = new Prodotto();
+                    prodotto.setCodiceProdotto(result.getInt("codice_prodotto"));
+                    prodotto.setNomeProdotto(result.getString("nome_prodotto"));
+                    prodotto.setCategoria(result.getString("categoria"));
+                    prodotto.setDescrizione(result.getString("descrizione"));
+                    prodotto.setFoto(result.getBlob("foto"));
+                    risultato.setProdotto(prodotto);
+                    risultato.setPrezzoMin(result.getInt("prezzo")*(1-result.getFloat("sconto")));
                     risultati.add(risultato);
                 }
             }
