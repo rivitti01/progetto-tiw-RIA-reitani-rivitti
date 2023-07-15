@@ -379,11 +379,11 @@
                 tr.appendChild(tdNome);
                 //inserisco il prezzo minimo
                 let tdPrezzoMinimo = document.createElement('td');
-                tdPrezzoMinimo.textContent = r.prezzoMin;
+                tdPrezzoMinimo.textContent = r.prezzoMin+"€";
                 tr.appendChild(tdPrezzoMinimo);
 
                 //inserisco le informazioni del proddtto inizialmente nascoste
-                let tbodyInfo = document.createElement('tbody');
+                let tbodyInfo = document.createElement('div');
                 tbodyInfo.classList.add("dettagli"+r.prodotto.codiceProdotto);
                 tbodyInfo.style.display = "none";
                 tableBody.appendChild(tbodyInfo);
@@ -408,6 +408,33 @@
                 pDescrizione.textContent = "Descrizione: " + r.prodotto.descrizione;
                 tdInfo.appendChild(pDescrizione);
 
+                //aggiungo il nome delle tabelle dei fornitori
+                let trTitoli = document.createElement('tr');
+                tbodyInfo.appendChild(trTitoli);
+                let tdNomeFornitori = document.createElement('td');
+                tdNomeFornitori.textContent = "Nome fornitore";
+                trTitoli.appendChild(tdNomeFornitori);
+                let tdValutazione = document.createElement('td');
+                tdValutazione.textContent = "Valutazione";
+                trTitoli.appendChild(tdValutazione);
+                let tdSpeseSpedizione = document.createElement('td');
+                tdSpeseSpedizione.textContent = "Spese di spedizione";
+                trTitoli.appendChild(tdSpeseSpedizione);
+                let tdSogliaSpedizione = document.createElement('td');
+                tdSogliaSpedizione.textContent = "Soglia di spedizione gratuita";
+                trTitoli.appendChild(tdSogliaSpedizione);
+                let tdProdottiCarrello= document.createElement('td');
+                tdProdottiCarrello.textContent = "Prodotti già nel carrello";
+                trTitoli.appendChild(tdProdottiCarrello);
+                let tdPrezzoCarrello = document.createElement('td');
+                tdPrezzoCarrello.textContent = "Prezzo nel carrello";
+                trTitoli.appendChild(tdPrezzoCarrello);
+                let tdPrezzo = document.createElement('td');
+                tdPrezzo.textContent = "Prezzo";
+                trTitoli.appendChild(tdPrezzo);
+                let tdAggiungi = document.createElement('td');
+                tdAggiungi.textContent = "Aggiungi al carrello";
+                trTitoli.appendChild(tdAggiungi);
 
                 //aggiungo la lista dei fornitori
                 r.fornitori.forEach( (f) => {
@@ -438,7 +465,7 @@
                     tdSpeseSpedizione.appendChild(divPrezzoMinimoSpedizione);
                     //inserisco la soglia di spedizione gratuita
                     let tdSogliaSpedizione = document.createElement('td');
-                    tdSogliaSpedizione.textContent = f.fornitore.soglia;
+                    tdSogliaSpedizione.textContent = f.fornitore.soglia+ "€";
                     trInfo2.appendChild(tdSogliaSpedizione);
                     //inserisco i prodotti già nel carrello
                     let tdProdottiCarrello = document.createElement('td');
@@ -450,7 +477,7 @@
                     trInfo2.appendChild(tdPrezzoCarrello);
                     //inserisco il prezzo di vendita
                     let tdPrezzoVendita = document.createElement('td');
-                    tdPrezzoVendita.textContent = f.prezzoVendita;
+                    tdPrezzoVendita.textContent = f.prezzoVendita+"€";
                     trInfo2.appendChild(tdPrezzoVendita);
 
                     //inserisco il form e il bottone per aggiungere al carrello
