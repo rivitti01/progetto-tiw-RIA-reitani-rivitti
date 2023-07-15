@@ -396,10 +396,18 @@
                 img.src = 'data:image/jpg;base64,' + r.prodotto.fotoBase64;
                 img.classList.add('card-img-top');
                 trInfo1.appendChild(img);
+                //inserisco le info
+                let tdInfo = document.createElement('td');
+                trInfo1.appendChild(tdInfo);
+                //inserisco la categoria
+                let pCategoria = document.createElement('p');
+                pCategoria.textContent = "Categoria: " + r.prodotto.categoria;
+                tdInfo.appendChild(pCategoria);
                 //inserisco la descrizione
-                let tdDescrizione = document.createElement('td');
-                tdDescrizione.textContent = "Categoria: " + r.prodotto.categoria + "\n\nDescrizione: " + r.prodotto.descrizione;
-                trInfo1.appendChild(tdDescrizione);
+                let pDescrizione = document.createElement('p');
+                pDescrizione.textContent = "Descrizione: " + r.prodotto.descrizione;
+                tdInfo.appendChild(pDescrizione);
+
 
                 //aggiungo la lista dei fornitori
                 r.fornitori.forEach( (f) => {
