@@ -1,3 +1,5 @@
+
+
 {
     /************************************************************************************/
 
@@ -14,7 +16,7 @@
             logout()
         else
             pageOrchestrator.showHome();
-    });
+    } );
 
     /************************************************************************************/
 
@@ -244,7 +246,6 @@
     /************************************************************************************/
 
     function Ricerca(container){
-        let risultato;
         this.containter = container;
         let posizione;
         let word;
@@ -275,11 +276,6 @@
 
                         switch( risposta.status ){
                             case 200: // ok
-                                // rimuovo la barra di ricerca
-                                let divSearch = document.querySelector('.searchForm');
-                                if (divSearch)
-                                    divSearch.remove();
-
                                 self.showRisultati(risposta);
                                 break;
                             case 400: // bad request
@@ -309,12 +305,24 @@
                 form.reportValidity();
         }
 
+        this.espandi = function(e){
+            e.preventDefault();
+            console.log(e.target.textContent);
+            const dettagli = this.parentNode.parentNode.parentNode.parentNode.querySelector('.dettagli'+e.target.textContent);
+
+            if (dettagli.style.display === 'none') {
+                dettagli.style.display = 'block';
+            } else {
+                dettagli.style.display = 'none';
+            }
+
+        }
+
         // metodo che mostra i risultati
         this.showRisultati = function(risposta){
             let paginaRisultati;
             try {
                 paginaRisultati = JSON.parse(risposta.responseText);
-                risultato = paginaRisultati;
             } catch(e) {
                 alert("Errore lato client durante il parsing di JSON dei risultati forniti dal server: " + e);
                 return;
@@ -323,8 +331,8 @@
             // svuoto la pagina
             this.containter.innerHTML = "";
             // se non ci sono risultati mostro un messaggio
-            if( paginaRisultati.risultati.length === 0 ){
-                let p = document.createElement('h1');
+            if( paginaRisultati.length === 0 ){
+                let p = document.createElement('p');
                 p.textContent = "Nessun risultato per la tua ricerca";
                 this.containter.appendChild(p);
                 return;
@@ -332,7 +340,6 @@
 
             //aggiungo la tabella con i risultati
             let table = document.createElement('table');
-            table.className = "tabellaRisultati"
             this.containter.appendChild(table);
             let tableHead = document.createElement('thead');
             table.appendChild(tableHead);
@@ -345,45 +352,26 @@
                 th.textContent = nomiColonneP[i];
                 tableHeaderRow.appendChild(th);
             }
-            // aggiungo il corpo della tabella
-            let tableBody = document.createElement('tbody');
-            table.appendChild(tableBody);
+
 
             //aggiungo i risultati alla tabella
             paginaRisultati.risultati.forEach( (r) => {
+                // aggiungo il corpo della tabella
+                let tableBody = document.createElement('tbody');
+                table.appendChild(tableBody);
                 //creo la riga
-
                 let tr = document.createElement('tr');
-
                 tableBody.appendChild(tr);
 
                 //inserisco il codice del prodotto come bottone per espandere
                 let tdCodice = document.createElement('td');
                 tr.appendChild(tdCodice);
-                let formEspandi = document.createElement('form');
-                formEspandi.id = "formEspandi";
-                formEspandi.action = "#";
-                tdCodice.appendChild(formEspandi);
-                let inputEspandi = document.createElement('input');
-                inputEspandi.type = "hidden";
-                inputEspandi.name = "codiceProdotto";
-                inputEspandi.value = r.prodotto.codiceProdotto;
-                formEspandi.appendChild(inputEspandi);
-                let inputEspandi2 = document.createElement('input');
-                inputEspandi2.type = "hidden";
-                inputEspandi2.name = "word";
-                inputEspandi2.value = word;
-                formEspandi.appendChild(inputEspandi2);
-                let inputEspandi3 = document.createElement('input');
-                inputEspandi3.type = "hidden";
-                inputEspandi3.name = "posizione";
-                inputEspandi3.value = posizione;
-                formEspandi.appendChild(inputEspandi3);
                 let bottoneEspandi = document.createElement('button');
-                bottoneEspandi.type = "submit";
+                bottoneEspandi.classList.add("tableButton");
                 bottoneEspandi.textContent = r.prodotto.codiceProdotto;
-                formEspandi.appendChild(bottoneEspandi);
-                bottoneEspandi.addEventListener('click', (e) => {self.espandi(e)});
+                bottoneEspandi.addEventListener('click', self.espandi);
+                tdCodice.appendChild(bottoneEspandi);
+                //bottoneEspandi.addEventListener('click', self.espandi);
 
                 //inserisco il nome del prodotto
                 let tdNome = document.createElement('td');
@@ -394,6 +382,63 @@
                 tdPrezzoMinimo.textContent = r.prezzoMin;
                 tr.appendChild(tdPrezzoMinimo);
 
+                //inserisco le informazioni del proddtto inizialmente nascoste
+                let tbodyInfo = document.createElement('tbody');
+                tbodyInfo.classList.add("dettagli"+r.prodotto.codiceProdotto);
+                tbodyInfo.style.display = "none";
+                tableBody.appendChild(tbodyInfo);
+
+                //creo la prima riga
+                let trInfo1 = document.createElement('tr');
+                tbodyInfo.appendChild(trInfo1);
+                //inserisco la foto
+                let img = document.createElement('img');
+                img.src = 'data:image/jpg;base64,' + r.prodotto.fotoBase64;
+                img.classList.add('card-img-top');
+                trInfo1.appendChild(img);
+                //inserisco la descrizione
+                let tdDescrizione = document.createElement('td');
+                tdDescrizione.textContent = "Categoria: " + r.prodotto.categoria + "\n\nDescrizione: " + r.prodotto.descrizione;
+                trInfo1.appendChild(tdDescrizione);
+
+                //aggiungo la lista dei fornitori
+                r.fornitori.forEach( (f) => {
+                    //creo la riga
+                    let trInfo2 = document.createElement('tr');
+                    tbodyInfo.appendChild(trInfo2);
+                    //inserisco il nome del fornitore
+                    let tdNomeFornitore = document.createElement('td');
+                    tdNomeFornitore.textContent = f.fornitore.nomeFornitore;
+                    trInfo2.appendChild(tdNomeFornitore);
+                    //inserisco la valutazione
+                    let tdValutazione = document.createElement('td');
+                    tdValutazione.textContent = f.fornitore.valutazione;
+                    trInfo2.appendChild(tdValutazione);
+                    //inserisco le spese di spedizione
+                    let tdSpeseSpedizione = document.createElement('td');
+                    tdSpeseSpedizione.textContent = "fasce spedizione";
+                    trInfo2.appendChild(tdSpeseSpedizione);
+                    //inserisco la soglia di spedizione gratuita
+                    let tdSogliaSpedizione = document.createElement('td');
+                    tdSogliaSpedizione.textContent = f.fornitore.soglia;
+                    trInfo2.appendChild(tdSogliaSpedizione);
+                    //inserisco i prodotti già nel carrello
+                    let tdProdottiCarrello = document.createElement('td');
+                    tdProdottiCarrello.textContent = "prodotti carrello";
+                    trInfo2.appendChild(tdProdottiCarrello);
+                    //inserisco il prezzo già nel carrello
+                    let tdPrezzoCarrello = document.createElement('td');
+                    tdPrezzoCarrello.textContent = "prezzo carrello";
+                    trInfo2.appendChild(tdPrezzoCarrello);
+                    //inserisco il prezzo di vendita
+                    let tdPrezzoVendita = document.createElement('td');
+                    tdPrezzoVendita.textContent = f.prezzoVendita;
+                    trInfo2.appendChild(tdPrezzoVendita);
+                    //inserisco per aggiungere al carrello
+                    let tdAggiungiCarrello = document.createElement('td');
+                    tdAggiungiCarrello.textContent = "aggiungi al carrello";
+                    trInfo2.appendChild(tdAggiungiCarrello);
+                })
             })
 
             //aggiungo se necessario il bottone per tornare alla pagina precedente
@@ -401,7 +446,7 @@
                 let formPrecedente = document.createElement('form');
                 formPrecedente.id = "formPrecedente";
                 formPrecedente.action = "#";
-                tableBody.appendChild(formPrecedente);
+                container.appendChild(formPrecedente);
                 let inputPrecedente = document.createElement('input');
                 inputPrecedente.type = "hidden";
                 inputPrecedente.name = "word";
@@ -424,7 +469,7 @@
                 let formSuccessiva = document.createElement('form');
                 formSuccessiva.id = "formPrecedente";
                 formSuccessiva.action = "#";
-                tableBody.appendChild(formSuccessiva);
+                container.appendChild(formSuccessiva);
                 let inputPrecedente = document.createElement('input');
                 inputPrecedente.type = "hidden";
                 inputPrecedente.name = "word";
@@ -442,31 +487,84 @@
                 formSuccessiva.addEventListener('submit', ricerca.cerca);
             }
 
+            ////////
 
-            this.espandi = function(e){
-                e.preventDefault();
-                for(var i = 0; i < risultato.risultati.length; i++){
-                    if(risultato.risultati[i].prodotto.codiceProdotto == e.target.textContent){
+            /*// creo la lista (non la aggiungo qui)
+            let ul = document.createElement('ul');
+            ul.classList.add('listview');
 
-                        //document.getElementsByClassName("tabellaRisultati").deleteRow(document.getElementsByClassName(risultato.risultati[i].prodotto.codiceProdotto));
+            // aggiungo una riga alla lista per ogni risultato
+            for( let i = 0; i<risultati.length; i++ ){
+                // aggiungo una riga
+                let li = document.createElement('li');
+                li.classList.add('listview-row');
 
-                        let risultatoEspanso = risultato.risultati[i];
-                        let tr = document.createElement('tr');
-                        tr.className = risultatoEspanso.prodotto.codiceProdotto;
+                // aggiungo id, nome del prodotto e testo come intestazione della riga
+                let a = document.createElement('a');
+                let prodotto = document.createTextNode(risultati[i].primo.id + " - " + risultati[i].primo.nome + ": " + (risultati[i].secondo).toFixed(2) + " €")
+                a.appendChild(prodotto);
+                a.classList.add("listview-row-title");
+                li.appendChild(a);
+                a.setAttribute("data-idprodotto", risultati[i].primo.id);
 
-
-
-                        let img = document.createElement('img');
-                        img.src = 'data:image/jpg;base64,' + risultato.risultati[i].prodotto.fotoBase64;
-
+                // assegno alla riga del prodotto la funzione per visualizzare e chiamare apriDettagli
+                a.onclick = function(e){
+                    if( ( e.target.getAttribute("data-opened") === null ) || ( e.target.getAttribute("data-opened") === "false" ) ){
+                        e.target.setAttribute("data-opened", true);
+                        makeCall("GET", "visualizza?idProdotto=" + e.target.getAttribute("data-idprodotto"), null, function(risposta){
+                            if( risposta.readyState === XMLHttpRequest.DONE ){
+                                switch( risposta.status ){
+                                    case 200: // ok
+                                        self.apriDettagli(e.target.parentNode, risposta);
+                                        break;
+                                    case 400: // bad request
+                                        alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
+                                        pageOrchestrator.hide();
+                                        pageOrchestrator.showHome();
+                                        break;
+                                    case 401: // unauthorized
+                                        alert("Non sei loggato.\nVerrai riportato al login.")
+                                        logout();
+                                        break;
+                                    case 500: // server error
+                                        alert("Errore nel server.\nVerrai riportato alla home.");
+                                        pageOrchestrator.hide();
+                                        pageOrchestrator.showHome();
+                                        break;
+                                    default:
+                                        alert("Errore sconosciuto.");
+                                        pageOrchestrator.hide();
+                                        pageOrchestrator.showHome();
+                                        return;
+                                }
+                            }
+                        } );
                     }
+                    else{
+                        e.target.setAttribute("data-opened", false);
+                        self.chiudiDettagli(e.target.parentNode);
+                    }
+
                 }
 
-
+                // aggiungo la riga alla lista
+                ul.appendChild(li);
             }
 
+            // aggiungo effettivamente la lista
+            this.containter.appendChild(ul);
 
+            /* --- aggiungo il div myModal nel container, la cui posizione a video verrà definita a posteriori --- */
+/*
+            let divModalContent = document.createElement('div')
+            divModalContent.id = "myModal";
+            divModalContent.classList.add('modal-content')
+            divModalContent.onmouseleave = function(){
+                closeModal();
+            }
+            this.containter.appendChild(divModalContent);
 
+            */
         }
 
 
