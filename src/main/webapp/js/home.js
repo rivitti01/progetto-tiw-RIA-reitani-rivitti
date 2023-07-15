@@ -330,116 +330,7 @@
                 return;
             }
 
-            //aggiungo la tabella con i risultati
-            let table = document.createElement('table');
-            table.className = "tabellaRisultati"
-            this.containter.appendChild(table);
-            let tableHead = document.createElement('thead');
-            table.appendChild(tableHead);
-            let tableHeaderRow = document.createElement('tr');
-            tableHead.appendChild(tableHeaderRow);
-            //do il nome alle colonne
-            let nomiColonneP = ['Codice','Nome','Prezzo minimo'];
-            for( let i=0; i<nomiColonneP.length; i++ ){
-                let th = document.createElement('th');
-                th.textContent = nomiColonneP[i];
-                tableHeaderRow.appendChild(th);
-            }
-            // aggiungo il corpo della tabella
-            let tableBody = document.createElement('tbody');
-            table.appendChild(tableBody);
-
-            //aggiungo i risultati alla tabella
-            paginaRisultati.risultati.forEach( (r) => {
-                //creo la riga
-
-                let tr = document.createElement('tr');
-
-                tableBody.appendChild(tr);
-
-                //inserisco il codice del prodotto come bottone per espandere
-                let tdCodice = document.createElement('td');
-                tr.appendChild(tdCodice);
-                let formEspandi = document.createElement('form');
-                formEspandi.id = "formEspandi";
-                formEspandi.action = "#";
-                tdCodice.appendChild(formEspandi);
-                let inputEspandi = document.createElement('input');
-                inputEspandi.type = "hidden";
-                inputEspandi.name = "codiceProdotto";
-                inputEspandi.value = r.prodotto.codiceProdotto;
-                formEspandi.appendChild(inputEspandi);
-                let inputEspandi2 = document.createElement('input');
-                inputEspandi2.type = "hidden";
-                inputEspandi2.name = "word";
-                inputEspandi2.value = word;
-                formEspandi.appendChild(inputEspandi2);
-                let inputEspandi3 = document.createElement('input');
-                inputEspandi3.type = "hidden";
-                inputEspandi3.name = "posizione";
-                inputEspandi3.value = posizione;
-                formEspandi.appendChild(inputEspandi3);
-                let bottoneEspandi = document.createElement('button');
-                bottoneEspandi.type = "submit";
-                bottoneEspandi.textContent = r.prodotto.codiceProdotto;
-                formEspandi.appendChild(bottoneEspandi);
-                bottoneEspandi.addEventListener('click', (e) => {self.espandi(e)});
-
-                //inserisco il nome del prodotto
-                let tdNome = document.createElement('td');
-                tdNome.textContent = r.prodotto.nomeProdotto;
-                tr.appendChild(tdNome);
-                //inserisco il prezzo minimo
-                let tdPrezzoMinimo = document.createElement('td');
-                tdPrezzoMinimo.textContent = r.prezzoMin;
-                tr.appendChild(tdPrezzoMinimo);
-
-            })
-
-            //aggiungo se necessario il bottone per tornare alla pagina precedente
-            if(posizione>0){
-                let formPrecedente = document.createElement('form');
-                formPrecedente.id = "formPrecedente";
-                formPrecedente.action = "#";
-                tableBody.appendChild(formPrecedente);
-                let inputPrecedente = document.createElement('input');
-                inputPrecedente.type = "hidden";
-                inputPrecedente.name = "word";
-                inputPrecedente.value = word;
-                formPrecedente.appendChild(inputPrecedente);
-                let inputPrecedente2 = document.createElement('input');
-                inputPrecedente2.type = "hidden";
-                inputPrecedente2.name = "posizione";
-                inputPrecedente2.value = (-5+parseInt(posizione));
-                formPrecedente.appendChild(inputPrecedente2);
-                let btnPrecedente = document.createElement('button');
-                btnPrecedente.type = "submit";
-                btnPrecedente.textContent = "Pagina precedente";
-                formPrecedente.appendChild(btnPrecedente);
-                formPrecedente.addEventListener('submit', ricerca.cerca);
-            }
-
-            //aggiungo se necessario il bottone per andare alla pagina successiva
-            if(!paginaRisultati.ultimaPagina){
-                let formSuccessiva = document.createElement('form');
-                formSuccessiva.id = "formPrecedente";
-                formSuccessiva.action = "#";
-                tableBody.appendChild(formSuccessiva);
-                let inputPrecedente = document.createElement('input');
-                inputPrecedente.type = "hidden";
-                inputPrecedente.name = "word";
-                inputPrecedente.value = word;
-                formSuccessiva.appendChild(inputPrecedente);
-                let inputPrecedente2 = document.createElement('input');
-                inputPrecedente2.type = "hidden";
-                inputPrecedente2.name = "posizione";
-                inputPrecedente2.value = (+5+parseInt(posizione));
-                formSuccessiva.appendChild(inputPrecedente2);
-                let btnPrecedente = document.createElement('button');
-                btnPrecedente.type = "submit";
-                btnPrecedente.textContent = "Pagina successiva";
-                formSuccessiva.appendChild(btnPrecedente);
-                formSuccessiva.addEventListener('submit', ricerca.cerca);
+            this.stampaTabella(paginaRisultati);
             }
 
 
@@ -447,20 +338,127 @@
                 e.preventDefault();
                 for(var i = 0; i < risultato.risultati.length; i++){
                     if(risultato.risultati[i].prodotto.codiceProdotto == e.target.textContent){
-
-                        //document.getElementsByClassName("tabellaRisultati").deleteRow(document.getElementsByClassName(risultato.risultati[i].prodotto.codiceProdotto));
-
-                        let risultatoEspanso = risultato.risultati[i];
-                        let tr = document.createElement('tr');
-                        tr.className = risultatoEspanso.prodotto.codiceProdotto;
-
-
-
-                        let img = document.createElement('img');
-                        img.src = 'data:image/jpg;base64,' + risultato.risultati[i].prodotto.fotoBase64;
-
+                        risultato.risultati[i].espandere = true;
+                       // this.showRisultati(risultato);
+                        return;
                     }
                 }
+
+
+            }
+
+            this.stampaTabella = function (paginaRisultati){
+
+                //aggiungo la tabella con i risultati
+                let table = document.createElement('table');
+                table.className = "tabellaRisultati"
+                this.containter.appendChild(table);
+                let tableHead = document.createElement('thead');
+                table.appendChild(tableHead);
+                let tableHeaderRow = document.createElement('tr');
+                tableHead.appendChild(tableHeaderRow);
+                //do il nome alle colonne
+                let nomiColonneP = ['Codice','Nome','Prezzo minimo'];
+                for( let i=0; i<nomiColonneP.length; i++ ){
+                    let th = document.createElement('th');
+                    th.textContent = nomiColonneP[i];
+                    tableHeaderRow.appendChild(th);
+                }
+                // aggiungo il corpo della tabella
+                let tableBody = document.createElement('tbody');
+                table.appendChild(tableBody);
+
+                //aggiungo i risultati alla tabella
+                paginaRisultati.risultati.forEach( (r) => {
+                    //creo la riga
+
+                    let tr = document.createElement('tr');
+
+                    tableBody.appendChild(tr);
+
+                    //inserisco il codice del prodotto come bottone per espandere
+                    let tdCodice = document.createElement('td');
+                    tr.appendChild(tdCodice);
+                    let formEspandi = document.createElement('form');
+                    formEspandi.id = "formEspandi";
+                    formEspandi.action = "#";
+                    tdCodice.appendChild(formEspandi);
+                    let inputEspandi = document.createElement('input');
+                    inputEspandi.type = "hidden";
+                    inputEspandi.name = "codiceProdotto";
+                    inputEspandi.value = r.prodotto.codiceProdotto;
+                    formEspandi.appendChild(inputEspandi);
+                    let inputEspandi2 = document.createElement('input');
+                    inputEspandi2.type = "hidden";
+                    inputEspandi2.name = "word";
+                    inputEspandi2.value = word;
+                    formEspandi.appendChild(inputEspandi2);
+                    let inputEspandi3 = document.createElement('input');
+                    inputEspandi3.type = "hidden";
+                    inputEspandi3.name = "posizione";
+                    inputEspandi3.value = posizione;
+                    formEspandi.appendChild(inputEspandi3);
+                    let bottoneEspandi = document.createElement('button');
+                    bottoneEspandi.type = "submit";
+                    bottoneEspandi.textContent = r.prodotto.codiceProdotto;
+                    formEspandi.appendChild(bottoneEspandi);
+                    bottoneEspandi.addEventListener('click', (e) => {self.espandi(e)});
+
+                    //inserisco il nome del prodotto
+                    let tdNome = document.createElement('td');
+                    tdNome.textContent = r.prodotto.nomeProdotto;
+                    tr.appendChild(tdNome);
+                    //inserisco il prezzo minimo
+                    let tdPrezzoMinimo = document.createElement('td');
+                    tdPrezzoMinimo.textContent = r.prezzoMin;
+                    tr.appendChild(tdPrezzoMinimo);
+
+                })
+
+                //aggiungo se necessario il bottone per tornare alla pagina precedente
+                if(posizione>0){
+                    let formPrecedente = document.createElement('form');
+                    formPrecedente.id = "formPrecedente";
+                    formPrecedente.action = "#";
+                    tableBody.appendChild(formPrecedente);
+                    let inputPrecedente = document.createElement('input');
+                    inputPrecedente.type = "hidden";
+                    inputPrecedente.name = "word";
+                    inputPrecedente.value = word;
+                    formPrecedente.appendChild(inputPrecedente);
+                    let inputPrecedente2 = document.createElement('input');
+                    inputPrecedente2.type = "hidden";
+                    inputPrecedente2.name = "posizione";
+                    inputPrecedente2.value = (-5+parseInt(posizione));
+                    formPrecedente.appendChild(inputPrecedente2);
+                    let btnPrecedente = document.createElement('button');
+                    btnPrecedente.type = "submit";
+                    btnPrecedente.textContent = "Pagina precedente";
+                    formPrecedente.appendChild(btnPrecedente);
+                    formPrecedente.addEventListener('submit', ricerca.cerca);
+                }
+
+                //aggiungo se necessario il bottone per andare alla pagina successiva
+                if(!paginaRisultati.ultimaPagina){
+                    let formSuccessiva = document.createElement('form');
+                    formSuccessiva.id = "formPrecedente";
+                    formSuccessiva.action = "#";
+                    tableBody.appendChild(formSuccessiva);
+                    let inputPrecedente = document.createElement('input');
+                    inputPrecedente.type = "hidden";
+                    inputPrecedente.name = "word";
+                    inputPrecedente.value = word;
+                    formSuccessiva.appendChild(inputPrecedente);
+                    let inputPrecedente2 = document.createElement('input');
+                    inputPrecedente2.type = "hidden";
+                    inputPrecedente2.name = "posizione";
+                    inputPrecedente2.value = (+5+parseInt(posizione));
+                    formSuccessiva.appendChild(inputPrecedente2);
+                    let btnPrecedente = document.createElement('button');
+                    btnPrecedente.type = "submit";
+                    btnPrecedente.textContent = "Pagina successiva";
+                    formSuccessiva.appendChild(btnPrecedente);
+                    formSuccessiva.addEventListener('submit', ricerca.cerca);
 
 
             }
