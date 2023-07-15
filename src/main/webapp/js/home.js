@@ -305,6 +305,19 @@
                 form.reportValidity();
         }
 
+        this.espandi = function(e){
+            e.preventDefault();
+            console.log(e.target.textContent);
+            const dettagli = this.parentNode.parentNode.parentNode.parentNode.querySelector('.dettagli'+e.target.textContent);
+
+            if (dettagli.style.display === 'none') {
+                dettagli.style.display = 'block';
+            } else {
+                dettagli.style.display = 'none';
+            }
+
+        }
+
         // metodo che mostra i risultati
         this.showRisultati = function(risposta){
             let paginaRisultati;
@@ -375,6 +388,7 @@
                 let bottoneEspandi = document.createElement('button');
                 bottoneEspandi.classList.add("tableButton");
                 bottoneEspandi.textContent = r.prodotto.codiceProdotto + 'r';
+                bottoneEspandi.addEventListener('click', self.espandi);
                 tdCodice.appendChild(bottoneEspandi);
                 //bottoneEspandi.addEventListener('click', self.espandi);
 
@@ -389,7 +403,7 @@
 
                 //inserisco le informazioni del proddtto inizialmente nascoste
                 let tbodyInfo = document.createElement('tbody');
-                tbodyInfo.classList.add("dettagli");
+                tbodyInfo.classList.add("dettagli"+r.prodotto.codiceProdotto+"r");
                 tbodyInfo.style.display = "none";
                 tableBody.appendChild(tbodyInfo);
 
@@ -449,20 +463,7 @@
             // Seleziona tutti i pulsanti di toggle
             var toggleButtons = document.querySelectorAll('.toggleButton');
 
-            // Itera sui pulsanti e aggiungi un gestore di eventi a ciascuno
-            toggleButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    // Trova il div dei dettagli correlato
-                    const dettagli = this.parentNode.parentNode.parentNode.parentNode.querySelector('.dettagli');
 
-                    // Alterna la visualizzazione dei dettagli
-                    if (dettagli.style.display === 'none') {
-                        dettagli.style.display = 'block';
-                    } else {
-                        dettagli.style.display = 'none';
-                    }
-                });
-            });
 
             //aggiungo se necessario il bottone per tornare alla pagina precedente
             if(posizione>0){
