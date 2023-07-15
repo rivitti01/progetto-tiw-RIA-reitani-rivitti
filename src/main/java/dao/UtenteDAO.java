@@ -48,4 +48,24 @@ public class UtenteDAO {
             }
         }
     }
+    public Utente getUtenteByEmail(String email) throws SQLException {
+        String query = "SELECT * FROM utente WHERE email = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(query);) {
+            pstatement.setString(1, email);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) // no results, credential check failed
+                    return null;
+                else {
+                    result.next();
+                    Utente user = new Utente();
+                    user.setEmail(result.getString("email"));
+                    user.setNome(result.getString("nome"));
+                    user.setCognome(result.getString("cognome"));
+                    user.setIndirizzo(result.getString("indirizzo"));
+                    user.setPassword(result.getString("password"));
+                    return user;
+                }
+            }
+        }
+    }
 }

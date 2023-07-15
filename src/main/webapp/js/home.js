@@ -276,12 +276,17 @@
 
                         switch( risposta.status ){
                             case 200: // ok
+
+                                //rimuovo la barra di ricerca
+                                let divSearch = document.querySelector('.searchForm');
+                                if (divSearch)
+                                    divSearch.remove();
+                                //chiamo la funzione che stampa la pagina risultati
                                 self.showRisultati(risposta);
                                 break;
                             case 400: // bad request
                                 alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
-                                //pageOrchestrator.hide();
-                                //pageOrchestrator.showHome();
+                                home.show();
                                 break;
                             case 401: // unauthorized
                                 alert("Non sei loggato.\nVerrai riportato al login.");
@@ -289,8 +294,7 @@
                                 break;
                             case 500: // server error
                                 alert("Errore nel server.\nVerrai riportato alla home.");
-                                //pageOrchestrator.hide();
-                                //pageOrchestrator.showHome();
+                                home.show();
                                 break;
                             default:
                                 alert("Errore sconosciuto.");
@@ -312,6 +316,33 @@
 
             if (dettagli.style.display === 'none') {
                 dettagli.style.display = 'block';
+
+                //invio al server che il prodotto è stato visualizzato, solo quando viene espanso, anche se sono contemplati inserimenti multipli dello stesso prodotto nel db
+                let call = "codiceProdotto=" + e.target.textContent+"&email="+sessionStorage.getItem("email");
+                makeCall("GET", "Visualizza?"+call, null, function(risposta){
+                    if ( risposta.readyState === XMLHttpRequest.DONE ) {
+                        switch( risposta.status ){
+                            case 200: // ok
+                                break;
+                            case 400: // bad request
+                                alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
+                                home.show();
+                                break;
+                            case 401: // unauthorized
+                                alert("Non sei loggato.\nVerrai riportato al login.");
+                                logout();
+                                break;
+                            case 500: // server error
+                                alert("Errore nel server.\nVerrai riportato alla home.");
+                                home.show();
+                                break;
+                            default:
+                                alert("Errore sconosciuto.");
+                                break;
+                        }
+                    }
+                } );
+
             } else {
                 dettagli.style.display = 'none';
             }

@@ -1,8 +1,6 @@
 package dao;
 
 import beans.Visualizza;
-import utils.Constants;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
