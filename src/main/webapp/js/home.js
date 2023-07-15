@@ -1,5 +1,3 @@
-
-
 {
     /************************************************************************************/
 
@@ -16,7 +14,7 @@
             logout()
         else
             pageOrchestrator.showHome();
-    } );
+    });
 
     /************************************************************************************/
 
@@ -246,6 +244,7 @@
     /************************************************************************************/
 
     function Ricerca(container){
+        let risultato;
         this.containter = container;
         let posizione;
         let word;
@@ -276,6 +275,11 @@
 
                         switch( risposta.status ){
                             case 200: // ok
+                                // rimuovo la barra di ricerca
+                                let divSearch = document.querySelector('.searchForm');
+                                if (divSearch)
+                                    divSearch.remove();
+
                                 self.showRisultati(risposta);
                                 break;
                             case 400: // bad request
@@ -310,6 +314,7 @@
             let paginaRisultati;
             try {
                 paginaRisultati = JSON.parse(risposta.responseText);
+                risultato = paginaRisultati;
             } catch(e) {
                 alert("Errore lato client durante il parsing di JSON dei risultati forniti dal server: " + e);
                 return;
@@ -318,8 +323,8 @@
             // svuoto la pagina
             this.containter.innerHTML = "";
             // se non ci sono risultati mostro un messaggio
-            if( paginaRisultati.length === 0 ){
-                let p = document.createElement('p');
+            if( paginaRisultati.risultati.length === 0 ){
+                let p = document.createElement('h1');
                 p.textContent = "Nessun risultato per la tua ricerca";
                 this.containter.appendChild(p);
                 return;
@@ -327,6 +332,7 @@
 
             //aggiungo la tabella con i risultati
             let table = document.createElement('table');
+            table.className = "tabellaRisultati"
             this.containter.appendChild(table);
             let tableHead = document.createElement('thead');
             table.appendChild(tableHead);
@@ -346,7 +352,9 @@
             //aggiungo i risultati alla tabella
             paginaRisultati.risultati.forEach( (r) => {
                 //creo la riga
+
                 let tr = document.createElement('tr');
+
                 tableBody.appendChild(tr);
 
                 //inserisco il codice del prodotto come bottone per espandere
@@ -375,7 +383,7 @@
                 bottoneEspandi.type = "submit";
                 bottoneEspandi.textContent = r.prodotto.codiceProdotto;
                 formEspandi.appendChild(bottoneEspandi);
-                bottoneEspandi.addEventListener('click', self.espandi);
+                bottoneEspandi.addEventListener('click', (e) => {self.espandi(e)});
 
                 //inserisco il nome del prodotto
                 let tdNome = document.createElement('td');
@@ -385,6 +393,7 @@
                 let tdPrezzoMinimo = document.createElement('td');
                 tdPrezzoMinimo.textContent = r.prezzoMin;
                 tr.appendChild(tdPrezzoMinimo);
+
             })
 
             //aggiungo se necessario il bottone per tornare alla pagina precedente
@@ -433,84 +442,31 @@
                 formSuccessiva.addEventListener('submit', ricerca.cerca);
             }
 
-            ////////
 
-            /*// creo la lista (non la aggiungo qui)
-            let ul = document.createElement('ul');
-            ul.classList.add('listview');
+            this.espandi = function(e){
+                e.preventDefault();
+                for(var i = 0; i < risultato.risultati.length; i++){
+                    if(risultato.risultati[i].prodotto.codiceProdotto == e.target.textContent){
 
-            // aggiungo una riga alla lista per ogni risultato
-            for( let i = 0; i<risultati.length; i++ ){
-                // aggiungo una riga
-                let li = document.createElement('li');
-                li.classList.add('listview-row');
+                        //document.getElementsByClassName("tabellaRisultati").deleteRow(document.getElementsByClassName(risultato.risultati[i].prodotto.codiceProdotto));
 
-                // aggiungo id, nome del prodotto e testo come intestazione della riga
-                let a = document.createElement('a');
-                let prodotto = document.createTextNode(risultati[i].primo.id + " - " + risultati[i].primo.nome + ": " + (risultati[i].secondo).toFixed(2) + " €")
-                a.appendChild(prodotto);
-                a.classList.add("listview-row-title");
-                li.appendChild(a);
-                a.setAttribute("data-idprodotto", risultati[i].primo.id);
+                        let risultatoEspanso = risultato.risultati[i];
+                        let tr = document.createElement('tr');
+                        tr.className = risultatoEspanso.prodotto.codiceProdotto;
 
-                // assegno alla riga del prodotto la funzione per visualizzare e chiamare apriDettagli
-                a.onclick = function(e){
-                    if( ( e.target.getAttribute("data-opened") === null ) || ( e.target.getAttribute("data-opened") === "false" ) ){
-                        e.target.setAttribute("data-opened", true);
-                        makeCall("GET", "visualizza?idProdotto=" + e.target.getAttribute("data-idprodotto"), null, function(risposta){
-                            if( risposta.readyState === XMLHttpRequest.DONE ){
-                                switch( risposta.status ){
-                                    case 200: // ok
-                                        self.apriDettagli(e.target.parentNode, risposta);
-                                        break;
-                                    case 400: // bad request
-                                        alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
-                                        pageOrchestrator.hide();
-                                        pageOrchestrator.showHome();
-                                        break;
-                                    case 401: // unauthorized
-                                        alert("Non sei loggato.\nVerrai riportato al login.")
-                                        logout();
-                                        break;
-                                    case 500: // server error
-                                        alert("Errore nel server.\nVerrai riportato alla home.");
-                                        pageOrchestrator.hide();
-                                        pageOrchestrator.showHome();
-                                        break;
-                                    default:
-                                        alert("Errore sconosciuto.");
-                                        pageOrchestrator.hide();
-                                        pageOrchestrator.showHome();
-                                        return;
-                                }
-                            }
-                        } );
+
+
+                        let img = document.createElement('img');
+                        img.src = 'data:image/jpg;base64,' + risultato.risultati[i].prodotto.fotoBase64;
+
                     }
-                    else{
-                        e.target.setAttribute("data-opened", false);
-                        self.chiudiDettagli(e.target.parentNode);
-                    }
-
                 }
 
-                // aggiungo la riga alla lista
-                ul.appendChild(li);
+
             }
 
-            // aggiungo effettivamente la lista
-            this.containter.appendChild(ul);
 
-            /* --- aggiungo il div myModal nel container, la cui posizione a video verrà definita a posteriori --- */
-/*
-            let divModalContent = document.createElement('div')
-            divModalContent.id = "myModal";
-            divModalContent.classList.add('modal-content')
-            divModalContent.onmouseleave = function(){
-                closeModal();
-            }
-            this.containter.appendChild(divModalContent);
 
-            */
         }
 
 
