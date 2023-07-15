@@ -339,12 +339,13 @@
                 th.textContent = nomiColonneP[i];
                 tableHeaderRow.appendChild(th);
             }
-            // aggiungo il corpo della tabella
-            let tableBody = document.createElement('tbody');
-            table.appendChild(tableBody);
+
 
             //aggiungo i risultati alla tabella
             paginaRisultati.risultati.forEach( (r) => {
+                // aggiungo il corpo della tabella
+                let tableBody = document.createElement('tbody');
+                table.appendChild(tableBody);
                 //creo la riga
                 let tr = document.createElement('tr');
                 tableBody.appendChild(tr);
@@ -352,7 +353,7 @@
                 //inserisco il codice del prodotto come bottone per espandere
                 let tdCodice = document.createElement('td');
                 tr.appendChild(tdCodice);
-                let formEspandi = document.createElement('form');
+                /*let formEspandi = document.createElement('form');
                 formEspandi.id = "formEspandi";
                 formEspandi.action = "#";
                 tdCodice.appendChild(formEspandi);
@@ -370,12 +371,12 @@
                 inputEspandi3.type = "hidden";
                 inputEspandi3.name = "posizione";
                 inputEspandi3.value = posizione;
-                formEspandi.appendChild(inputEspandi3);
+                formEspandi.appendChild(inputEspandi3);*/
                 let bottoneEspandi = document.createElement('button');
-                bottoneEspandi.type = "submit";
-                bottoneEspandi.textContent = r.prodotto.codiceProdotto;
-                formEspandi.appendChild(bottoneEspandi);
-                bottoneEspandi.addEventListener('click', self.espandi);
+                bottoneEspandi.classList.add("tableButton");
+                bottoneEspandi.textContent = r.prodotto.codiceProdotto + 'r';
+                tdCodice.appendChild(bottoneEspandi);
+                //bottoneEspandi.addEventListener('click', self.espandi);
 
                 //inserisco il nome del prodotto
                 let tdNome = document.createElement('td');
@@ -385,14 +386,90 @@
                 let tdPrezzoMinimo = document.createElement('td');
                 tdPrezzoMinimo.textContent = r.prezzoMin;
                 tr.appendChild(tdPrezzoMinimo);
+
+                //inserisco le informazioni del proddtto inizialmente nascoste
+                let tbodyInfo = document.createElement('tbody');
+                tbodyInfo.classList.add("dettagli");
+                tbodyInfo.style.display = "none";
+                tableBody.appendChild(tbodyInfo);
+
+                //creo la prima riga
+                let trInfo1 = document.createElement('tr');
+                tbodyInfo.appendChild(trInfo1);
+                //inserisco la foto
+                let img = document.createElement('img');
+                img.src = 'data:image/jpg;base64,' + r.prodotto.fotoBase64;
+                img.classList.add('card-img-top');
+                trInfo1.appendChild(img);
+                //inserisco la descrizione
+                let tdDescrizione = document.createElement('td');
+                tdDescrizione.textContent = "Categoria: " + r.prodotto.categoria + "\n\nDescrizione: " + r.prodotto.descrizione;
+                trInfo1.appendChild(tdDescrizione);
+
+                //aggiungo la lista dei fornitori
+                r.fornitori.forEach( (f) => {
+                    //creo la riga
+                    let trInfo2 = document.createElement('tr');
+                    tbodyInfo.appendChild(trInfo2);
+                    //inserisco il nome del fornitore
+                    let tdNomeFornitore = document.createElement('td');
+                    tdNomeFornitore.textContent = f.fornitore.nomeFornitore;
+                    trInfo2.appendChild(tdNomeFornitore);
+                    //inserisco la valutazione
+                    let tdValutazione = document.createElement('td');
+                    tdValutazione.textContent = f.fornitore.valutazione;
+                    trInfo2.appendChild(tdValutazione);
+                    //inserisco le spese di spedizione
+                    let tdSpeseSpedizione = document.createElement('td');
+                    tdSpeseSpedizione.textContent = "fasce spedizione";
+                    trInfo2.appendChild(tdSpeseSpedizione);
+                    //inserisco la soglia di spedizione gratuita
+                    let tdSogliaSpedizione = document.createElement('td');
+                    tdSogliaSpedizione.textContent = f.fornitore.soglia;
+                    trInfo2.appendChild(tdSogliaSpedizione);
+                    //inserisco i prodotti già nel carrello
+                    let tdProdottiCarrello = document.createElement('td');
+                    tdProdottiCarrello.textContent = "prodotti carrello";
+                    trInfo2.appendChild(tdProdottiCarrello);
+                    //inserisco il prezzo già nel carrello
+                    let tdPrezzoCarrello = document.createElement('td');
+                    tdPrezzoCarrello.textContent = "prezzo carrello";
+                    trInfo2.appendChild(tdPrezzoCarrello);
+                    //inserisco il prezzo di vendita
+                    let tdPrezzoVendita = document.createElement('td');
+                    tdPrezzoVendita.textContent = f.prezzoVendita;
+                    trInfo2.appendChild(tdPrezzoVendita);
+                    //inserisco per aggiungere al carrello
+                    let tdAggiungiCarrello = document.createElement('td');
+                    tdAggiungiCarrello.textContent = "aggiungi al carrello";
+                    trInfo2.appendChild(tdAggiungiCarrello);
+                })
             })
+
+            // Seleziona tutti i pulsanti di toggle
+            var toggleButtons = document.querySelectorAll('.toggleButton');
+
+            // Itera sui pulsanti e aggiungi un gestore di eventi a ciascuno
+            toggleButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    // Trova il div dei dettagli correlato
+                    const dettagli = this.parentNode.parentNode.parentNode.parentNode.querySelector('.dettagli');
+
+                    // Alterna la visualizzazione dei dettagli
+                    if (dettagli.style.display === 'none') {
+                        dettagli.style.display = 'block';
+                    } else {
+                        dettagli.style.display = 'none';
+                    }
+                });
+            });
 
             //aggiungo se necessario il bottone per tornare alla pagina precedente
             if(posizione>0){
                 let formPrecedente = document.createElement('form');
                 formPrecedente.id = "formPrecedente";
                 formPrecedente.action = "#";
-                tableBody.appendChild(formPrecedente);
+                container.appendChild(formPrecedente);
                 let inputPrecedente = document.createElement('input');
                 inputPrecedente.type = "hidden";
                 inputPrecedente.name = "word";
@@ -415,7 +492,7 @@
                 let formSuccessiva = document.createElement('form');
                 formSuccessiva.id = "formPrecedente";
                 formSuccessiva.action = "#";
-                tableBody.appendChild(formSuccessiva);
+                container.appendChild(formSuccessiva);
                 let inputPrecedente = document.createElement('input');
                 inputPrecedente.type = "hidden";
                 inputPrecedente.name = "word";
