@@ -366,28 +366,9 @@
                 //inserisco il codice del prodotto come bottone per espandere
                 let tdCodice = document.createElement('td');
                 tr.appendChild(tdCodice);
-                /*let formEspandi = document.createElement('form');
-                formEspandi.id = "formEspandi";
-                formEspandi.action = "#";
-                tdCodice.appendChild(formEspandi);
-                let inputEspandi = document.createElement('input');
-                inputEspandi.type = "hidden";
-                inputEspandi.name = "codiceProdotto";
-                inputEspandi.value = r.prodotto.codiceProdotto;
-                formEspandi.appendChild(inputEspandi);
-                let inputEspandi2 = document.createElement('input');
-                inputEspandi2.type = "hidden";
-                inputEspandi2.name = "word";
-                inputEspandi2.value = word;
-                formEspandi.appendChild(inputEspandi2);
-                let inputEspandi3 = document.createElement('input');
-                inputEspandi3.type = "hidden";
-                inputEspandi3.name = "posizione";
-                inputEspandi3.value = posizione;
-                formEspandi.appendChild(inputEspandi3);*/
                 let bottoneEspandi = document.createElement('button');
                 bottoneEspandi.classList.add("tableButton");
-                bottoneEspandi.textContent = r.prodotto.codiceProdotto + 'r';
+                bottoneEspandi.textContent = r.prodotto.codiceProdotto;
                 bottoneEspandi.addEventListener('click', self.espandi);
                 tdCodice.appendChild(bottoneEspandi);
                 //bottoneEspandi.addEventListener('click', self.espandi);
@@ -403,7 +384,7 @@
 
                 //inserisco le informazioni del proddtto inizialmente nascoste
                 let tbodyInfo = document.createElement('tbody');
-                tbodyInfo.classList.add("dettagli"+r.prodotto.codiceProdotto+"r");
+                tbodyInfo.classList.add("dettagli"+r.prodotto.codiceProdotto);
                 tbodyInfo.style.display = "none";
                 tableBody.appendChild(tbodyInfo);
 
@@ -459,11 +440,6 @@
                     trInfo2.appendChild(tdAggiungiCarrello);
                 })
             })
-
-            // Seleziona tutti i pulsanti di toggle
-            var toggleButtons = document.querySelectorAll('.toggleButton');
-
-
 
             //aggiungo se necessario il bottone per tornare alla pagina precedente
             if(posizione>0){
