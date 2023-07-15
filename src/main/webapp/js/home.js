@@ -424,8 +424,18 @@
                     trInfo2.appendChild(tdValutazione);
                     //inserisco le spese di spedizione
                     let tdSpeseSpedizione = document.createElement('td');
-                    tdSpeseSpedizione.textContent = "fasce spedizione";
                     trInfo2.appendChild(tdSpeseSpedizione);
+                    //inserisco le fasce di spedizione
+                    f.fornitore.fasce.forEach ( (fascia) => {
+                        //inserisco la singola fascia
+                        let divFascia = document.createElement('div');
+                        divFascia.textContent ="tra "+ fascia.min + " e " + fascia.max + " il prezzo è: "+ fascia.prezzo +"€";
+                        tdSpeseSpedizione.appendChild(divFascia);
+                    })
+                    //inserisco il prezzo minimo di spedizione
+                    let divPrezzoMinimoSpedizione = document.createElement('div');
+                    divPrezzoMinimoSpedizione.textContent = "oltre: " + f.fornitore.spedizioneMin + "€";
+                    tdSpeseSpedizione.appendChild(divPrezzoMinimoSpedizione);
                     //inserisco la soglia di spedizione gratuita
                     let tdSogliaSpedizione = document.createElement('td');
                     tdSogliaSpedizione.textContent = f.fornitore.soglia;
