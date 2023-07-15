@@ -434,10 +434,33 @@
                     let tdPrezzoVendita = document.createElement('td');
                     tdPrezzoVendita.textContent = f.prezzoVendita;
                     trInfo2.appendChild(tdPrezzoVendita);
-                    //inserisco per aggiungere al carrello
+
+                    //inserisco il form e il bottone per aggiungere al carrello
                     let tdAggiungiCarrello = document.createElement('td');
-                    tdAggiungiCarrello.textContent = "aggiungi al carrello";
                     trInfo2.appendChild(tdAggiungiCarrello);
+                    let formAggiungiCarrello = document.createElement('form');
+                    formAggiungiCarrello.action = "#";
+                    tdAggiungiCarrello.appendChild(formAggiungiCarrello);
+                    let inputAggiungiCarrello = document.createElement('input');
+                    inputAggiungiCarrello.type = "hidden";
+                    inputAggiungiCarrello.name = "codiceProdotto";
+                    inputAggiungiCarrello.value = r.prodotto.codiceProdotto;
+                    formAggiungiCarrello.appendChild(inputAggiungiCarrello);
+                    let inputAggiungiCarrello2 = document.createElement('input');
+                    inputAggiungiCarrello2.type = "hidden";
+                    inputAggiungiCarrello2.name = "codiceFornitore";
+                    inputAggiungiCarrello2.value = f.fornitore.codiceFornitore;
+                    formAggiungiCarrello.appendChild(inputAggiungiCarrello2);
+                    let inputAggiungiCarrello3 = document.createElement('input');
+                    inputAggiungiCarrello3.type = "text";
+                    inputAggiungiCarrello3.name = "quantità";
+                    inputAggiungiCarrello3.placeholder = "quantità";
+                    inputAggiungiCarrello3.required = true;
+                    formAggiungiCarrello.appendChild(inputAggiungiCarrello3);
+                    let bottoneAggiungiCarrello = document.createElement('button');
+                    bottoneAggiungiCarrello.type = "submit";
+                    bottoneAggiungiCarrello.textContent = "Aggiungi al carrello";
+                    formAggiungiCarrello.appendChild(bottoneAggiungiCarrello);
                 })
             })
 
