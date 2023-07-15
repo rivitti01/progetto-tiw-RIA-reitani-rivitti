@@ -1,6 +1,5 @@
 package beans;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Risultato {
@@ -8,7 +7,7 @@ public class Risultato {
     private Prodotto prodotto;
     private float prezzoMin;
     private boolean espandere = false;
-    private List<FornitoreConProdotto> fornitori = new ArrayList<FornitoreConProdotto>();
+    private List<FornitoreConProdotto> fornitori;
 
 
     public boolean isEspandere() {

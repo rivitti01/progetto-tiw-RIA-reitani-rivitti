@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PaginaRisultati {
 
-    private List<Risultato> risultati = new ArrayList<Risultato>();
+    private List<Risultato> risultati = new ArrayList<>();
     boolean ultimaPagina = false;
 
     public List<Risultato> getRisultati() {

@@ -9,7 +9,7 @@ public class Fornitore {
     private int valutazione;
     private int soglia;
     private int spedizioneMin;
-    private List<Fasce> fasce = new ArrayList<Fasce>();
+    private List<Fasce> fasce = new ArrayList<>();
 
     public int getCodiceFornitore() {
         return codiceFornitore;
@@ -48,5 +48,13 @@ public class Fornitore {
     }
     public void setSpedizioneMin(int spedizioneMin) {
         this.spedizioneMin = spedizioneMin;
+    }
+
+    public List<Fasce> getFasce() {
+        return fasce;
+    }
+
+    public void setFasce(List<Fasce> fasce) {
+        this.fasce = fasce;
     }
 }

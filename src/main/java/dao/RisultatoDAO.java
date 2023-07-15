@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class RisultatoDAO {
@@ -36,6 +37,7 @@ public class RisultatoDAO {
                     prodotto.setCategoria(result.getString("categoria"));
                     prodotto.setDescrizione(result.getString("descrizione"));
                     prodotto.setFoto(result.getBlob("foto"));
+                    prodotto.setFotoBase64(Base64.getEncoder().encodeToString(result.getBlob("foto").getBytes(1, (int) result.getBlob("foto").length())));
                     risultato.setProdotto(prodotto);
                     risultato.setPrezzoMin(result.getInt("prezzo")*(1-result.getFloat("sconto")));
                     risultati.add(risultato);

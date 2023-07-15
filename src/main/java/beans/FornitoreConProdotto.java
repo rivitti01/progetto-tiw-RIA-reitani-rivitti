@@ -2,15 +2,15 @@ package beans;
 
 public class FornitoreConProdotto {
 
-    private int prezzoVendita;
+    private float prezzoVendita;
 
     private Fornitore fornitore;
 
-    public int getPrezzoVendita() {
+    public float getPrezzoVendita() {
         return prezzoVendita;
     }
 
-    public void setPrezzoVendita(int prezzoVendita) {
+    public void setPrezzoVendita(float prezzoVendita) {
         this.prezzoVendita = prezzoVendita;
     }
 
