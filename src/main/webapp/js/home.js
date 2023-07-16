@@ -52,6 +52,8 @@
             //carrello = new Carrello(this.container);
             // creo un oggetto-funzionalità Ordine
             ordini = new Ordini(this.container);
+            carrello = new Carrello(this.container);
+
 
             // assegno al bottone carrello la funzione
             document.getElementById('carrello').onclick = function(){
@@ -244,6 +246,74 @@
     }
 
     /************************************************************************************/
+    function Carrello(container){
+        this.container = container;
+        this.show = function() {
+            container.innerHTML = "";
+            let self = this;
+            let carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
+            if (carrello == null || carrello.size === 0) {
+                let span = document.createElement("span");
+                let h1 = document.createElement("h1");
+                h1.textContent = "Il tuo carrello è ancora vuoto!";
+                span.appendChild(h1);
+                this.container.appendChild(span);
+            }else{
+                //funzione che chiama il server per reperire i prezzi dei prodotti
+
+                //-----------------------------------------
+
+                let divCenteredRow = document.createElement("div");
+                divCenteredRow.classList.add("centered-row");
+                let table = document.createElement("table");
+                let caption = document.createElement("caption");
+                divCenteredRow.appendChild(table);
+                caption.textContent = "Ecco il tuo carrello";
+                table.appendChild(caption);
+                for (let i = 0; i < carrello.size; i++) {
+                    let tableBody = document.createElement("tbody");
+                    table.appendChild(tableBody);
+                    let tr = document.createElement("tr");
+                    tr.classList.add("separator");
+                    tableBody.appendChild(tr);
+                    let th = document.createElement("th");
+                    th.colSpan = "4";
+                    th.textContent = Array.from(carrello.keys())[i];
+                    tr.appendChild(th);
+                    for (let j = 0; j < carrello.get(Array.from(carrello.keys())[i]).length; j++) {
+                        let tr2 = document.createElement("tr");
+                    }
+                    //da completare
+
+
+                }
+
+            }
+
+        }
+
+        this.aggiungiAlCarrello = function(prodotto){
+            let self = this;
+            let prodotti = [];
+            if( sessionStorage.getItem("carrello") != null ){
+                let carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
+                if (carrello.get(prodotto.codiceFornitore)!=null){
+                    prodotti = carrello.get(prodotto.codiceFornitore);
+                }
+                prodotti.push(prodotto);
+                carrello.set(prodotto.codiceFornitore, prodotti);
+                sessionStorage.setItem("carrello", JSON.stringify(Array.from(carrello.entries())));
+            }else {
+                let carrello = new Map();
+                prodotti.push(prodotto);
+                carrello.set(prodotto.codiceFornitore, prodotti);
+                sessionStorage.setItem("carrello", JSON.stringify(Array.from(carrello.entries())));
+            }
+            //this.show();
+        }
+
+    }
+    /************************************************************************************/
 
     function Ricerca(container){
         this.containter = container;
@@ -346,6 +416,18 @@
             } else {
                 dettagli.style.display = 'none';
             }
+
+        }
+        this.carrello = function(e){
+            e.preventDefault();
+            var form = e.target;
+            let quantita = form.elements["quantita"].value;
+            let codiceProdotto = form.elements["codiceProdotto"].value;
+            let codiceFornitore = form.elements["codiceFornitore"].value;
+
+            let prodotto = {quantita : quantita, codiceProdotto : codiceProdotto, codiceFornitore : codiceFornitore};
+            carrello.aggiungiAlCarrello(prodotto);
+
 
         }
 
@@ -515,6 +597,8 @@
                     let tdAggiungiCarrello = document.createElement('td');
                     trInfo2.appendChild(tdAggiungiCarrello);
                     let formAggiungiCarrello = document.createElement('form');
+                    formAggiungiCarrello.classList.add("formCarrello");
+                    formAggiungiCarrello.id = "formCarrello";
                     formAggiungiCarrello.action = "#";
                     tdAggiungiCarrello.appendChild(formAggiungiCarrello);
                     let inputAggiungiCarrello = document.createElement('input');
@@ -529,14 +613,15 @@
                     formAggiungiCarrello.appendChild(inputAggiungiCarrello2);
                     let inputAggiungiCarrello3 = document.createElement('input');
                     inputAggiungiCarrello3.type = "text";
-                    inputAggiungiCarrello3.name = "quantità";
-                    inputAggiungiCarrello3.placeholder = "quantità";
+                    inputAggiungiCarrello3.name = "quantita";
+                    inputAggiungiCarrello3.placeholder = "quantita";
                     inputAggiungiCarrello3.required = true;
                     formAggiungiCarrello.appendChild(inputAggiungiCarrello3);
                     let bottoneAggiungiCarrello = document.createElement('button');
                     bottoneAggiungiCarrello.type = "submit";
                     bottoneAggiungiCarrello.textContent = "Aggiungi al carrello";
                     formAggiungiCarrello.appendChild(bottoneAggiungiCarrello);
+                    formAggiungiCarrello.addEventListener('submit', self.carrello);
                 })
             })
 
@@ -586,84 +671,7 @@
                 formSuccessiva.addEventListener('submit', ricerca.cerca);
             }
 
-            ////////
 
-            /*// creo la lista (non la aggiungo qui)
-            let ul = document.createElement('ul');
-            ul.classList.add('listview');
-
-            // aggiungo una riga alla lista per ogni risultato
-            for( let i = 0; i<risultati.length; i++ ){
-                // aggiungo una riga
-                let li = document.createElement('li');
-                li.classList.add('listview-row');
-
-                // aggiungo id, nome del prodotto e testo come intestazione della riga
-                let a = document.createElement('a');
-                let prodotto = document.createTextNode(risultati[i].primo.id + " - " + risultati[i].primo.nome + ": " + (risultati[i].secondo).toFixed(2) + " €")
-                a.appendChild(prodotto);
-                a.classList.add("listview-row-title");
-                li.appendChild(a);
-                a.setAttribute("data-idprodotto", risultati[i].primo.id);
-
-                // assegno alla riga del prodotto la funzione per visualizzare e chiamare apriDettagli
-                a.onclick = function(e){
-                    if( ( e.target.getAttribute("data-opened") === null ) || ( e.target.getAttribute("data-opened") === "false" ) ){
-                        e.target.setAttribute("data-opened", true);
-                        makeCall("GET", "visualizza?idProdotto=" + e.target.getAttribute("data-idprodotto"), null, function(risposta){
-                            if( risposta.readyState === XMLHttpRequest.DONE ){
-                                switch( risposta.status ){
-                                    case 200: // ok
-                                        self.apriDettagli(e.target.parentNode, risposta);
-                                        break;
-                                    case 400: // bad request
-                                        alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
-                                        pageOrchestrator.hide();
-                                        pageOrchestrator.showHome();
-                                        break;
-                                    case 401: // unauthorized
-                                        alert("Non sei loggato.\nVerrai riportato al login.")
-                                        logout();
-                                        break;
-                                    case 500: // server error
-                                        alert("Errore nel server.\nVerrai riportato alla home.");
-                                        pageOrchestrator.hide();
-                                        pageOrchestrator.showHome();
-                                        break;
-                                    default:
-                                        alert("Errore sconosciuto.");
-                                        pageOrchestrator.hide();
-                                        pageOrchestrator.showHome();
-                                        return;
-                                }
-                            }
-                        } );
-                    }
-                    else{
-                        e.target.setAttribute("data-opened", false);
-                        self.chiudiDettagli(e.target.parentNode);
-                    }
-
-                }
-
-                // aggiungo la riga alla lista
-                ul.appendChild(li);
-            }
-
-            // aggiungo effettivamente la lista
-            this.containter.appendChild(ul);
-
-            /* --- aggiungo il div myModal nel container, la cui posizione a video verrà definita a posteriori --- */
-/*
-            let divModalContent = document.createElement('div')
-            divModalContent.id = "myModal";
-            divModalContent.classList.add('modal-content')
-            divModalContent.onmouseleave = function(){
-                closeModal();
-            }
-            this.containter.appendChild(divModalContent);
-
-            */
         }
 
 
