@@ -1,4 +1,7 @@
-package beans;
+package utils;
+
+import beans.Fornitore;
+import beans.Prodotto;
 
 import java.util.HashMap;
 import java.util.Map;

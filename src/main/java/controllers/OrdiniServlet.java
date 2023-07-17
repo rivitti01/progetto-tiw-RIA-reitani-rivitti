@@ -1,13 +1,9 @@
 package controllers;
 
-import beans.Informazioni;
-import beans.Ordine;
-import beans.OrdineConInformazioni;
-import beans.Prodotto;
+import utils.OrdineConInformazioni;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dao.OrdineDAO;
-import org.thymeleaf.context.WebContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,8 +13,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 @WebServlet("/Ordini")
 public class OrdiniServlet extends ServletPadre {

@@ -2,10 +2,8 @@ package dao;
 
 import beans.Informazioni;
 import beans.Ordine;
-import beans.OrdineConInformazioni;
-import beans.Prodotto;
+import utils.OrdineConInformazioni;
 
-import javax.swing.*;
 import java.sql.*;
 import java.util.*;
 

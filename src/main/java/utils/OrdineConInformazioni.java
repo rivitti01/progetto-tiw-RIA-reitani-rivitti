@@ -1,4 +1,7 @@
-package beans;
+package utils;
+
+import beans.Informazioni;
+import beans.Ordine;
 
 import java.util.List;
 

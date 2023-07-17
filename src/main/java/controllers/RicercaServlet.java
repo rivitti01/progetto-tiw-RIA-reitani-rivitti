@@ -6,13 +6,14 @@ import beans.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dao.*;
-import org.thymeleaf.context.WebContext;
-import beans.Risultato;
+import utils.PaginaRisultati;
+import utils.Risultato;
+import utils.CarrelloFornitore;
+import utils.FornitoreConProdotto;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -78,15 +79,6 @@ public class RicercaServlet extends ServletPadre {
 
         //inserisco i risultati nella pagina
         paginaRisultati.setRisultati(risultati);
-
-
-
-
-        //crea le mappe per la visualizzazione dei risultati
-        ProdottoDAO prodottoDAO = new ProdottoDAO(connection);
-        FasceDAO fasceDAO = new FasceDAO(connection);
-        VendeDAO vendeDAO = new VendeDAO(connection);
-        FornitoreDAO fornitoreDAO = new FornitoreDAO(connection);
 
 
         for (Risultato risultato : risultati){

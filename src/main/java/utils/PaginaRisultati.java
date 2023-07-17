@@ -1,4 +1,6 @@
-package beans;
+package utils;
+
+import utils.Risultato;
 
 import java.util.ArrayList;
 import java.util.List;

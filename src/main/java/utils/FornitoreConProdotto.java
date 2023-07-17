@@ -1,4 +1,6 @@
-package beans;
+package utils;
+
+import beans.Fornitore;
 
 public class FornitoreConProdotto {
 

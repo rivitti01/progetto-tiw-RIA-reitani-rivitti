@@ -1,4 +1,7 @@
-package beans;
+package utils;
+
+import beans.Prodotto;
+import utils.FornitoreConProdotto;
 
 import java.util.List;
 

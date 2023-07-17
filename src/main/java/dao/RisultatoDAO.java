@@ -1,7 +1,7 @@
 package dao;
 
 import beans.Prodotto;
-import beans.Risultato;
+import utils.Risultato;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -49,11 +49,9 @@
             // creo un oggetto-funzionalità Search
             ricerca = new Ricerca(this.container);
             // creo un oggetto-pagina Carrello
-            //carrello = new Carrello(this.container);
+            carrello = new Carrello(this.container);
             // creo un oggetto-funzionalità Ordine
             ordini = new Ordini(this.container);
-            carrello = new Carrello(this.container);
-
 
             // assegno al bottone carrello la funzione
             document.getElementById('carrello').onclick = function(){

@@ -1,6 +1,6 @@
 package dao;
 
-import beans.CarrelloFornitore;
+import utils.CarrelloFornitore;
 import beans.Prodotto;
 import java.sql.Connection;
 import java.sql.SQLException;

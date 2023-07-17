@@ -1,6 +1,6 @@
 package controllers;
 
-import beans.CarrelloFornitore;
+import utils.CarrelloFornitore;
 import beans.Informazioni;
 import beans.Ordine;
 import beans.Prodotto;
