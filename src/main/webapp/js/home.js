@@ -7,6 +7,27 @@
     let home, ricerca, carrello, ordini;
     let pageOrchestrator = new PageOrchestrator();
 
+    class FornitoreCarrello  {
+        constructor(codiceFornitore) {
+            this.codiceFornitore = codiceFornitore;
+            this.nomeFornitore = null;
+            this.prezzoSpedizione = null;
+            this.prezzoTotaleProdotti = null;
+            this.quantitaTotaleProdotti = null;
+            this.prodottiCarrello = null;
+        }
+
+    };
+
+
+    class ProdottoCarrello  {
+        constructor(quantita, codiceProdotto, codiceFornitore) {
+            this.quantita = quantita;
+            this.codiceProdotto = codiceProdotto;
+            this.codiceFornitore = codiceFornitore;
+        }
+    };
+
     /************************************************************************************/
 
     // se quando la pagina carica non sono loggato chiamo logout, altrimenti visualizzo la home
@@ -246,6 +267,7 @@
     /************************************************************************************/
     function Carrello(container){
         this.container = container;
+
         this.show = function() {
             container.innerHTML = "";
             let self = this;
@@ -257,6 +279,8 @@
                 span.appendChild(h1);
                 this.container.appendChild(span);
             }else{
+                this.aggiornaCarrello();
+                carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
                 //funzione che chiama il server per reperire i prezzi dei prodotti
 
                 //-----------------------------------------
@@ -290,24 +314,74 @@
 
         }
 
+        this.aggiornaCarrello = function(){
+            let self = this;
+            let carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
+
+            postJsonData('Carrello', carrello , function(risposta) {
+                if ( risposta.readyState === XMLHttpRequest.DONE )
+
+                    switch( risposta.status ){
+                        case 200: // ok
+                            //aggiorno il carrello
+                            sessionStorage.setItem("carrello", risposta.responseText);
+                            break;
+                        case 400: // bad request
+                            alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
+                            home.show();
+                            break;
+                        case 401: // unauthorized
+                            alert("Non sei loggato.\nVerrai riportato al login.");
+                            logout();
+                            break;
+                        case 500: // server error
+                            alert("Errore nel server.\nVerrai riportato alla home.");
+                            home.show();
+                            break;
+                        default:
+                            alert("Errore sconosciuto.");
+                            //pageOrchestrator.hide();
+                            //pageOrchestrator.showHome();
+                            break;
+                    }
+            } );
+
+
+
+        }
+
         this.aggiungiAlCarrello = function(prodotto){
             let self = this;
             let prodotti = [];
+            let fornitoreCarrello;
+            let carrello;
             if( sessionStorage.getItem("carrello") != null ){
-                let carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
+                //prendo il carrello dalla sessione se esiste
+                carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
                 if (carrello.get(prodotto.codiceFornitore)!=null){
-                    prodotti = carrello.get(prodotto.codiceFornitore);
+                    //se il fornitore è già presente nel carrello lo prendo
+                    fornitoreCarrello = carrello.get(prodotto.codiceFornitore);
+                    //prendo i prodotti del fornitore
+                    prodotti = fornitoreCarrello.prodottiCarrello;
+                }else{
+                    //se il fornitore non è presente nel carrello lo creo
+                    fornitoreCarrello = new FornitoreCarrello(prodotto.codiceFornitore);
                 }
-                prodotti.push(prodotto);
-                carrello.set(prodotto.codiceFornitore, prodotti);
-                sessionStorage.setItem("carrello", JSON.stringify(Array.from(carrello.entries())));
             }else {
-                let carrello = new Map();
-                prodotti.push(prodotto);
-                carrello.set(prodotto.codiceFornitore, prodotti);
-                sessionStorage.setItem("carrello", JSON.stringify(Array.from(carrello.entries())));
+                //se il carrello non esiste lo creo
+                carrello = new Map();
+                //creo il fornitore nel carrello
+                fornitoreCarrello = new FornitoreCarrello(prodotto.codiceFornitore);
             }
-            //this.show();
+            //aggiungo il prodotto al fornitore
+            prodotti.push(prodotto);
+            fornitoreCarrello.prodottiCarrello = prodotti;
+            //aggiungo il fornitore al carrello
+            carrello.set(prodotto.codiceFornitore, fornitoreCarrello);
+            //aggiungo il carrello alla sessione
+            sessionStorage.setItem("carrello", JSON.stringify(Array.from(carrello.entries())));
+
+            this.show();
         }
 
     }
@@ -416,6 +490,7 @@
             }
 
         }
+
         this.carrello = function(e){
             e.preventDefault();
             var form = e.target;
@@ -423,9 +498,8 @@
             let codiceProdotto = form.elements["codiceProdotto"].value;
             let codiceFornitore = form.elements["codiceFornitore"].value;
 
-            let prodotto = {quantita : quantita, codiceProdotto : codiceProdotto, codiceFornitore : codiceFornitore};
-            carrello.aggiungiAlCarrello(prodotto);
-
+            let prodottoCarrello = new ProdottoCarrello(quantita, codiceProdotto, codiceFornitore);
+            carrello.aggiungiAlCarrello(prodottoCarrello);
 
         }
 

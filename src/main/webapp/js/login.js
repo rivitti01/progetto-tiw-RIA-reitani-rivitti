@@ -1,6 +1,7 @@
 (function() { // avoid variables ending up in the global scope
 
     document.getElementById("submit").addEventListener('click', (e) => {
+        e.preventDefault();
         var form = e.target.closest("form");
         if (form.checkValidity()) {
             makeCall("POST", 'Login',e.target.closest("form"), function(x) {
@@ -12,13 +13,13 @@
                                 window.location.href = "home.html";
                                 break;
                             case 400: // bad request
-                                document.getElementById("errormessage").textContent = message;
+                                document.getElementById("errormessage").textContent = "Email o password errati";
                                 break;
                             case 401: // unauthorized
-                                document.getElementById("errormessage").textContent = message;
+                                document.getElementById("errormessage").textContent = "Email o password errati";
                                 break;
                             case 500: // server error
-                                document.getElementById("errormessage").textContent = message;
+                                document.getElementById("errormessage").textContent = "Errore lato server riprovare più tardi";
                                 break;
                         }
                     }
