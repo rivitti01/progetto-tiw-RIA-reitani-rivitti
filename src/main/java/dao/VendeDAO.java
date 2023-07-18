@@ -89,7 +89,7 @@ public class VendeDAO {
             pstatement.setInt(1, codiceProdotto);
             pstatement.setInt(2, codiceFornitore);
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
+                if (!result.isBeforeFirst()) // no results
                     return -1;
                 else {
                     result.next();

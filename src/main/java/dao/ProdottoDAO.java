@@ -21,21 +21,6 @@ public class ProdottoDAO {
         this.con = connection;
     }
 
-    public Prodotto getInformation(int codiceProdotto) throws SQLException {
-        String query = "SELECT * FROM prodotto WHERE codice_prodotto = ?";
-        try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setInt(1, codiceProdotto);
-            try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
-                    return null;
-                else {
-                    result.next();
-                    return mapRowToProdotto(result);
-                }
-            }
-        }
-    }
-
     public List<Prodotto> completeListVisualized(List<Prodotto> prodotti) throws SQLException {
         List<Prodotto> moreProducts = new ArrayList<>();
         String query = "SELECT distinct(prodotto.codice_prodotto),prodotto.nome_prodotto,prodotto.categoria,prodotto.descrizione,prodotto.foto FROM prodotto join vende on prodotto.codice_prodotto = vende.codice_prodotto WHERE vende.sconto > 0 AND prodotto.categoria = ? ORDER BY RAND() LIMIT 5";
@@ -124,7 +109,7 @@ public class ProdottoDAO {
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, codiceProdotto);
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
+                if (!result.isBeforeFirst()) // no results
                     return null;
                 else {
                     result.next();

@@ -25,6 +25,7 @@
             this.quantita = quantita;
             this.codiceProdotto = codiceProdotto;
             this.codiceFornitore = codiceFornitore;
+            this.nomeProdotto = null;
         }
     };
 

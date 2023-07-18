@@ -6,6 +6,8 @@ public class ProdottoCarrello {
     private int quantita;
     private int codiceFornitore;
 
+    private String nomeProdotto;
+
     public int getCodiceProdotto() {
         return codiceProdotto;
     }
@@ -28,5 +30,13 @@ public class ProdottoCarrello {
 
     public void setCodiceFornitore(int codiceFornitore) {
         this.codiceFornitore = codiceFornitore;
+    }
+
+    public String getNomeProdotto() {
+        return nomeProdotto;
+    }
+
+    public void setNomeProdotto(String nomeProdotto) {
+        this.nomeProdotto = nomeProdotto;
     }
 }
