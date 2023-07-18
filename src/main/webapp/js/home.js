@@ -272,47 +272,48 @@
         this.show = function() {
             container.innerHTML = "";
             let self = this;
-            let carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
+            let carrello = JSON.parse(sessionStorage.getItem("carrello"));
             if (carrello == null || carrello.size === 0) {
+                // mostro un messaggio se il carrello è vuoto
                 let span = document.createElement("span");
                 let h1 = document.createElement("h1");
                 h1.textContent = "Il tuo carrello è ancora vuoto!";
                 span.appendChild(h1);
                 this.container.appendChild(span);
             }else{
+                //aggiorno il carrello per stamparlo
                 this.aggiornaCarrello();
-                carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
-                //funzione che chiama il server per reperire i prezzi dei prodotti
-
-                //-----------------------------------------
-
-                let divCenteredRow = document.createElement("div");
-                divCenteredRow.classList.add("centered-row");
-                let table = document.createElement("table");
-                let caption = document.createElement("caption");
-                divCenteredRow.appendChild(table);
-                caption.textContent = "Ecco il tuo carrello";
-                table.appendChild(caption);
-                for (let i = 0; i < carrello.size; i++) {
-                    let tableBody = document.createElement("tbody");
-                    table.appendChild(tableBody);
-                    let tr = document.createElement("tr");
-                    tr.classList.add("separator");
-                    tableBody.appendChild(tr);
-                    let th = document.createElement("th");
-                    th.colSpan = "4";
-                    th.textContent = Array.from(carrello.keys())[i];
-                    tr.appendChild(th);
-                    for (let j = 0; j < carrello.get(Array.from(carrello.keys())[i]).length; j++) {
-                        let tr2 = document.createElement("tr");
-                    }
-                    //da completare
-
-
-                }
-
             }
 
+        }
+
+        this.stampaCarrello = function(){
+            let self = this;
+            let carrello = JSON.parse(sessionStorage.getItem("carrello"));
+
+            //mostro il carrello
+            let divCenteredRow = document.createElement("div");
+            divCenteredRow.classList.add("centered-row");
+            let table = document.createElement("table");
+            divCenteredRow.appendChild(table);
+            let caption = document.createElement("caption");
+            divCenteredRow.appendChild(table);
+            caption.textContent = "Ecco il tuo carrello";
+            table.appendChild(caption);
+            for( var[key,value] of carrello) {
+                let tableBody = document.createElement("tbody");
+                table.appendChild(tableBody);
+                let tr = document.createElement("tr");
+                tr.classList.add("separator");
+                tableBody.appendChild(tr);
+                let th = document.createElement("th");
+                th.colSpan = 4;
+                th.textContent = value.nomeFornitore;
+                tr.appendChild(th);
+                /*for (let j = 0; j < carrello.get(Array.from(carrello.keys())[i]).length; j++) {
+                    let tr2 = document.createElement("tr");
+                }*/
+            };
         }
 
         this.aggiornaCarrello = function(){
@@ -326,6 +327,8 @@
                         case 200: // ok
                             //aggiorno il carrello
                             sessionStorage.setItem("carrello", risposta.responseText);
+                            //stampo il carrello
+                            self.stampaCarrello();
                             break;
                         case 400: // bad request
                             alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
