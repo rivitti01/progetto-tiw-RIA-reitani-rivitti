@@ -663,16 +663,29 @@
                     trInfo2.appendChild(tdSogliaSpedizione);
                     //inserisco i prodotti già nel carrello
                     let tdProdottiCarrello = document.createElement('td');
-                    //tdProdottiCarrello.textContent = "prodotti carrello";
-                    if (carrello.keys().has(f.fornitore.codiceFornitore)){
-                        tdProdottiCarrello.textContent = carrello.get(f.fornitore.codiceFornitore).quantitaTotaleProdotti.toString();
-                    } else {
-                        tdProdottiCarrello.textContent = "0";
+                    //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il numero di prodotti di quel fornitore
+                    for (let [key, value] of carrello){
+                        if (key == f.fornitore.codiceFornitore) {
+                            tdProdottiCarrello.textContent = value.quantitaTotaleProdotti.toString();
+                            break;
+                        }else {
+                            tdProdottiCarrello.textContent = "0";
+                        }
                     }
                     trInfo2.appendChild(tdProdottiCarrello);
                     //inserisco il prezzo già nel carrello
                     let tdPrezzoCarrello = document.createElement('td');
-                    tdPrezzoCarrello.textContent = "prezzo carrello";
+                    //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il prezzo tatale dei prodotti di quel fornitore
+                    for (let [key, value] of carrello){
+                        if (key == f.fornitore.codiceFornitore) {
+                            tdPrezzoCarrello.textContent = value.prezzoTotaleProdotti.toString()+"€";
+                            break;
+                        }else {
+                            tdPrezzoCarrello.textContent = "0€";
+                        }
+                    }
+
+
                     trInfo2.appendChild(tdPrezzoCarrello);
                     //inserisco il prezzo di vendita
                     let tdPrezzoVendita = document.createElement('td');
