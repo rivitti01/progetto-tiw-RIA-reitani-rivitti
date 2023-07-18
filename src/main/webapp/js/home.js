@@ -293,6 +293,7 @@
 
             //mostro il carrello
             let divCenteredRow = document.createElement("div");
+            container.appendChild(divCenteredRow);
             divCenteredRow.classList.add("centered-row");
             let table = document.createElement("table");
             divCenteredRow.appendChild(table);
@@ -326,7 +327,10 @@
                     switch( risposta.status ){
                         case 200: // ok
                             //aggiorno il carrello
-                            sessionStorage.setItem("carrello", risposta.responseText);
+                            let json = risposta.responseText;
+                            let carrello = JSON.parse(json);
+                            let mappaCarrello = new Map(Object.entries(carrello))
+                            sessionStorage.setItem("carrello", JSON.stringify(Array.from(mappaCarrello.entries())));
                             //stampo il carrello
                             self.stampaCarrello();
                             break;
