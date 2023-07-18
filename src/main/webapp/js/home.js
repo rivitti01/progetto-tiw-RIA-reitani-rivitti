@@ -513,6 +513,7 @@
 
         // metodo che mostra i risultati
         this.showRisultati = function(risposta){
+            let carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
             let paginaRisultati;
             try {
                 paginaRisultati = JSON.parse(risposta.responseText);
@@ -662,7 +663,12 @@
                     trInfo2.appendChild(tdSogliaSpedizione);
                     //inserisco i prodotti già nel carrello
                     let tdProdottiCarrello = document.createElement('td');
-                    tdProdottiCarrello.textContent = "prodotti carrello";
+                    //tdProdottiCarrello.textContent = "prodotti carrello";
+                    if (carrello.keys().has(f.fornitore.codiceFornitore)){
+                        tdProdottiCarrello.textContent = carrello.get(f.fornitore.codiceFornitore).quantitaTotaleProdotti.toString();
+                    } else {
+                        tdProdottiCarrello.textContent = "0";
+                    }
                     trInfo2.appendChild(tdProdottiCarrello);
                     //inserisco il prezzo già nel carrello
                     let tdPrezzoCarrello = document.createElement('td');
