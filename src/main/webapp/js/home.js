@@ -311,9 +311,42 @@
                 th.colSpan = 4;
                 th.textContent = value.nomeFornitore;
                 tr.appendChild(th);
-                /*for (let j = 0; j < carrello.get(Array.from(carrello.keys())[i]).length; j++) {
-                    let tr2 = document.createElement("tr");
-                }*/
+
+                //aggiungo i prodotti
+                for(const prod of value.prodottiCarrello){
+                    //creo la riga
+                    let trProd = document.createElement("tr");
+                    tableBody.appendChild(trProd);
+                    //inserisco il nome
+                    let tdNome = document.createElement("td");
+                    tdNome.colSpan = 2;
+                    tdNome.textContent = prod.nomeProdotto;
+                    trProd.appendChild(tdNome);
+                    //inserisco la quantità
+                    let tdQuantita = document.createElement("td");
+                    tdQuantita.colSpan = 2;
+                    tdQuantita.textContent = "Quantità: " +prod.quantita;
+                    trProd.appendChild(tdQuantita);
+                }
+
+                //aggiungo la riga per le info del fornitore
+                let trInfo = document.createElement("tr");
+                tableBody.appendChild(trInfo);
+                //inserisco il prezzo totale dei prodotti
+                let tdPrezzo = document.createElement("td");
+                tdPrezzo.textContent = "Prezzo dei prodotti: " + value.prezzoTotaleProdotti + "€";
+                trInfo.appendChild(tdPrezzo);
+                //inserisco il prezzo della spedizione
+                let tdSpedizione = document.createElement("td");
+                tdSpedizione.textContent = "Prezzo della spedizione: " + value.prezzoSpedizione + "€";
+                trInfo.appendChild(tdSpedizione);
+                //inserisco il bottone per ordinare
+                let tdOrdina = document.createElement("td");
+                tdOrdina.colSpan = 2;
+                trInfo.appendChild(tdOrdina);
+                let buttonOrdina = document.createElement("button");
+                buttonOrdina.textContent = "Ordina";
+                tdOrdina.appendChild(buttonOrdina);
             };
         }
 
@@ -664,11 +697,11 @@
                     //inserisco i prodotti già nel carrello
                     let tdProdottiCarrello = document.createElement('td');
                     //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il numero di prodotti di quel fornitore
-                    for (let [key, value] of carrello){
-                        if (key == f.fornitore.codiceFornitore) {
+                    for (let [key, value] of carrello) {
+                        if (key === f.fornitore.codiceFornitore) {
                             tdProdottiCarrello.textContent = value.quantitaTotaleProdotti.toString();
                             break;
-                        }else {
+                        } else {
                             tdProdottiCarrello.textContent = "0";
                         }
                     }
