@@ -708,26 +708,47 @@
                     trInfo2.appendChild(tdSogliaSpedizione);
                     //inserisco i prodotti già nel carrello
                     let tdProdottiCarrello = document.createElement('td');
-                    //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il numero di prodotti di quel fornitore
-                    for (let [key, value] of carrello) {
-                        if (key === f.fornitore.codiceFornitore) {
-                            tdProdottiCarrello.textContent = value.quantitaTotaleProdotti.toString();
-                            break;
-                        } else {
-                            tdProdottiCarrello.textContent = "0";
+                    //verifico che il carrello non sia vuoto
+                    if (carrello.size > 0) {
+                        //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il numero di prodotti di quel fornitore
+                        for (let [key, value] of carrello) {
+                            if (key == f.fornitore.codiceFornitore) {
+                                tdProdottiCarrello.textContent = value.quantitaTotaleProdotti.toString();
+                                //l'id di ogni td è composto da f + il codicefornitore + p + il codiceprodotto così da poterlo identificare in modo univoco
+                                tdProdottiCarrello.id = "f"+f.fornitore.codiceFornitore+"p"+r.prodotto.codiceProdotto;
+                                //aggiungo l'evento se il mouse si avvicina alla finestra
+                                tdProdottiCarrello.onmouseover = function () {
+                                    mostraFinestra(tdProdottiCarrello.id, f.fornitore.codiceFornitore);
+                                }
+                                //aggiungo l'evento se il mouse si allontana dalla finestra
+                                tdProdottiCarrello.onmouseleave = function () {
+                                    //gli passo l'id del td e il numero dei prodotti nel carrello per poter aggiornare la finestra al valore di prima del mouseover
+                                    nascondiFinestra(tdProdottiCarrello.id, value.quantitaTotaleProdotti.toString());
+                                }
+                                break;
+                            } else {
+                                tdProdottiCarrello.textContent = "0";
+                            }
                         }
+                    }else {
+                        tdProdottiCarrello.textContent = "0";
                     }
                     trInfo2.appendChild(tdProdottiCarrello);
                     //inserisco il prezzo già nel carrello
                     let tdPrezzoCarrello = document.createElement('td');
-                    //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il prezzo tatale dei prodotti di quel fornitore
-                    for (let [key, value] of carrello){
-                        if (key == f.fornitore.codiceFornitore) {
-                            tdPrezzoCarrello.textContent = value.prezzoTotaleProdotti.toString()+"€";
-                            break;
-                        }else {
-                            tdPrezzoCarrello.textContent = "0€";
+                    //verifico che il carrello non sia vuoto
+                    if (carrello.size > 0) {
+                        //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il prezzo tatale dei prodotti di quel fornitore
+                        for (let [key, value] of carrello) {
+                            if (key == f.fornitore.codiceFornitore) {
+                                tdPrezzoCarrello.textContent = value.prezzoTotaleProdotti.toString() + "€";
+                                break;
+                            } else {
+                                tdPrezzoCarrello.textContent = "0€";
+                            }
                         }
+                    }else {
+                        tdPrezzoCarrello.textContent = "0€";
                     }
 
 
@@ -816,6 +837,15 @@
             }
 
 
+        }
+        mostraFinestra = function (id,codiceFornitore) {
+            console.log(id + " " + codiceFornitore);
+            let finestra = document.getElementById(id);
+            finestra.textContent = "Hello world";
+        }
+        nascondiFinestra = function (id,value) {
+            let finestra = document.getElementById(id);
+            finestra.textContent = value;
         }
 
 
