@@ -1001,7 +1001,7 @@
                                 let mappaCarrello = new Map(Object.entries(carrello))
                                 sessionStorage.setItem("carrello", JSON.stringify(Array.from(mappaCarrello.entries())));
                                 //mostro gli ordini
-                                self.show();
+                                ordini.show();
                                 break;
                             case 400: // bad request
                                 alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
