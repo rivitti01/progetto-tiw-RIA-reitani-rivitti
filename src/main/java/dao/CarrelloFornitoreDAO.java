@@ -15,7 +15,7 @@ public class CarrelloFornitoreDAO {
 
     public void addProdotto(Prodotto prodotto, int quantita, Connection connection) throws SQLException {
 
-        //verifico se il prodotto è già presente nel carrello, se lo è aggiorno la quantità, altrimenti lo aggiungo
+       /* //verifico se il prodotto è già presente nel carrello, se lo è aggiorno la quantità, altrimenti lo aggiungo
         if (carrelloFornitore.getProdotti().containsKey(prodotto)) {
             int quantitaPrecedente = carrelloFornitore.getProdotti().get(prodotto);
             carrelloFornitore.getProdotti().put(prodotto, quantitaPrecedente + quantita);
@@ -40,7 +40,7 @@ public class CarrelloFornitoreDAO {
                 carrelloFornitore.setPrezzoSpedizione(spedizione);
             else
                 carrelloFornitore.setPrezzoSpedizione(carrelloFornitore.getFornitore().getSpedizioneMin());
-        }
+        }*/
 
     }
 

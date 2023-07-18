@@ -3,23 +3,21 @@ package utils;
 import beans.Fornitore;
 import beans.Prodotto;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CarrelloFornitore {
-    private final Fornitore fornitore;
+
+    private int codiceFornitore;
+
+    private String nomeFornitore;
     private int prezzoSpedizione = 0;
     private float prezzoTotaleProdotti = 0;
     private int quantitaTotaleProdotti = 0;
-    private Map<Prodotto, Integer> prodotti = new HashMap<>();
 
-    public CarrelloFornitore(Fornitore fornitore){
-        this.fornitore = fornitore;
-    }
-
-    public Fornitore getFornitore() {
-        return fornitore;
-    }
+    private List<ProdottoCarrello> prodottiCarrello = new ArrayList<>();
 
     public int getPrezzoSpedizione() {
         return prezzoSpedizione;
@@ -45,7 +43,27 @@ public class CarrelloFornitore {
         this.quantitaTotaleProdotti = quantitaTotaleProdotti;
     }
 
-    public Map<Prodotto, Integer> getProdotti() {
-        return prodotti;
+    public int getCodiceFornitore() {
+        return codiceFornitore;
+    }
+
+    public void setCodiceFornitore(int codiceFornitore) {
+        this.codiceFornitore = codiceFornitore;
+    }
+
+    public String getNomeFornitore() {
+        return nomeFornitore;
+    }
+
+    public void setNomeFornitore(String nomeFornitore) {
+        this.nomeFornitore = nomeFornitore;
+    }
+
+    public List<ProdottoCarrello> getProdottiCarrello() {
+        return prodottiCarrello;
+    }
+
+    public void setProdottiCarrello(List<ProdottoCarrello> prodottiCarrello) {
+        this.prodottiCarrello = prodottiCarrello;
     }
 }

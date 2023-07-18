@@ -28,7 +28,7 @@ public class CreaOrdineServlet extends ServletPadre{
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
+       /* HttpSession session = request.getSession();
 
         //controlla che il codice del fornitore sia un numero
         int IDFornitore;
@@ -102,7 +102,7 @@ public class CreaOrdineServlet extends ServletPadre{
 
         //mostro la nuova pagina degli ordini
         String path = getServletContext().getContextPath() + "/Ordini";
-        response.sendRedirect(path);
+        response.sendRedirect(path);*/
 
 
     }

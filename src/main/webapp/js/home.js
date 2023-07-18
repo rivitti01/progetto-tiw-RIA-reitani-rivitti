@@ -316,7 +316,7 @@
 
         this.aggiornaCarrello = function(){
             let self = this;
-            let carrello = new Map(JSON.parse(sessionStorage.getItem("carrello")));
+            let carrello = JSON.parse(sessionStorage.getItem("carrello"));
 
             postJsonData('Carrello', carrello , function(risposta) {
                 if ( risposta.readyState === XMLHttpRequest.DONE )

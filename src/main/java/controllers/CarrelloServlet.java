@@ -28,6 +28,7 @@ public class CarrelloServlet extends ServletPadre{
 
         // imposto la codifica per leggere i parametri, coerentemente all'HTML
         request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
         // leggo la stringa in input
         BufferedReader reader = request.getReader();
@@ -41,7 +42,7 @@ public class CarrelloServlet extends ServletPadre{
         Gson gson = new Gson();
 
         // prendo il token della classe da ritornare
-        Type typeToken = new TypeToken<List<CarrelloFornitore>>(){}.getType();
+        Type typeToken = new TypeToken<Map<Integer, CarrelloFornitore>>(){}.getType();
         // e converto da JSON
         try {
             carrello = gson.fromJson(requestBody, typeToken);
