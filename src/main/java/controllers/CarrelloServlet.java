@@ -32,8 +32,6 @@ public class CarrelloServlet extends ServletPadre {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        int i = 1;
 
         Map<Integer, CarrelloFornitore> carrello;
 

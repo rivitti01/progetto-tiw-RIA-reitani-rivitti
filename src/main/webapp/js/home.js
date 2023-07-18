@@ -42,9 +42,6 @@
 
     /************************************************************************************/
 
-    //#####DICHIARIAMO LE FUNZIONI#####
-
-    //logout
     function logout() {
         makeCall("GET", 'Logout', null, function (risposta) {
             if (risposta.readyState === XMLHttpRequest.DONE) {
@@ -137,7 +134,6 @@
 
     /************************************************************************************/
 
-    //home
     function Home(container) {
         this.container = container;
 
@@ -266,7 +262,9 @@
     }
 
     /************************************************************************************/
+
     function Carrello(container){
+
         this.container = container;
 
         this.show = function() {
@@ -287,9 +285,11 @@
 
         }
 
-        this.stampaCarrello = function(){
+        this.stampaCarrello = function() {
             let self = this;
             let carrello = JSON.parse(sessionStorage.getItem("carrello"));
+
+            let ordini = new Ordini(this.container);
 
             //mostro il carrello
             let divCenteredRow = document.createElement("div");
@@ -301,7 +301,7 @@
             divCenteredRow.appendChild(table);
             caption.textContent = "Ecco il tuo carrello";
             table.appendChild(caption);
-            for( var[key,value] of carrello) {
+            for (var [key, value] of carrello) {
                 let tableBody = document.createElement("tbody");
                 table.appendChild(tableBody);
                 let tr = document.createElement("tr");
@@ -313,7 +313,7 @@
                 tr.appendChild(th);
 
                 //aggiungo i prodotti
-                for(const prod of value.prodottiCarrello){
+                for (const prod of value.prodottiCarrello) {
                     //creo la riga
                     let trProd = document.createElement("tr");
                     tableBody.appendChild(trProd);
@@ -325,7 +325,7 @@
                     //inserisco la quantità
                     let tdQuantita = document.createElement("td");
                     tdQuantita.colSpan = 2;
-                    tdQuantita.textContent = "Quantità: " +prod.quantita;
+                    tdQuantita.textContent = "Quantità: " + prod.quantita;
                     trProd.appendChild(tdQuantita);
                 }
 
@@ -344,10 +344,21 @@
                 let tdOrdina = document.createElement("td");
                 tdOrdina.colSpan = 2;
                 trInfo.appendChild(tdOrdina);
+                let formCreazioneOrdine = document.createElement("form");
+                formCreazioneOrdine.id = "formCreazioneOrdine";
+                formCreazioneOrdine.action = "#";
+                tdOrdina.appendChild(formCreazioneOrdine);
+                let inputIdFornitore = document.createElement("input");
+                inputIdFornitore.type = "hidden";
+                inputIdFornitore.name = "codiceFornitore";
+                inputIdFornitore.value = key;
+                formCreazioneOrdine.appendChild(inputIdFornitore);
                 let buttonOrdina = document.createElement("button");
+                buttonOrdina.type = "submit";
                 buttonOrdina.textContent = "Ordina";
-                tdOrdina.appendChild(buttonOrdina);
-            };
+                formCreazioneOrdine.appendChild(buttonOrdina);
+                formCreazioneOrdine.addEventListener("submit", ordini.creaOrdine);
+            }
         }
 
         this.aggiornaCarrello = function(){
@@ -426,6 +437,7 @@
         }
 
     }
+
     /************************************************************************************/
 
     function Ricerca(container){
@@ -811,7 +823,6 @@
 
     /************************************************************************************/
 
-    //ordini
     function Ordini(container) {
         this.container = container;
 
@@ -958,6 +969,68 @@
                 })
 
             })
+
+        }
+
+        this.creaOrdine = function (e) {
+
+            const self = this;
+            e.preventDefault();
+
+            // prendo il form
+            var form = e.target;
+
+            // se il contenuto della barra di ricerca al momento del submit è valido
+            if( form.checkValidity() ){
+
+                let carrello = JSON.parse(sessionStorage.getItem("carrello"));
+
+                let coppia = {
+                    codiceFornitore: form.elements["codiceFornitore"].value,
+                    carrello: carrello,
+                }
+
+                postJsonData('CreaOrdine', coppia , function(risposta) {
+                    if ( risposta.readyState === XMLHttpRequest.DONE )
+
+                        switch( risposta.status ){
+                            case 200: // ok
+                                //aggiorno il carrello
+                                let json = risposta.responseText;
+                                let carrello = JSON.parse(json);
+                                let mappaCarrello = new Map(Object.entries(carrello))
+                                sessionStorage.setItem("carrello", JSON.stringify(Array.from(mappaCarrello.entries())));
+                                //mostro gli ordini
+                                self.show();
+                                break;
+                            case 400: // bad request
+                                alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
+                                home.show();
+                                break;
+                            case 401: // unauthorized
+                                alert("Non sei loggato.\nVerrai riportato al login.");
+                                logout();
+                                break;
+                            case 500: // server error
+                                alert("Errore nel server.\nVerrai riportato alla home.");
+                                home.show();
+                                break;
+                            default:
+                                alert("Errore sconosciuto.");
+                                //pageOrchestrator.hide();
+                                //pageOrchestrator.showHome();
+                                break;
+                        }
+                } );
+
+
+
+
+            }else{
+                // altrimenti mostro i messaggi di errore
+                form.reportValidity();
+            }
+
 
         }
 
