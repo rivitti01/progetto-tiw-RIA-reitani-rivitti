@@ -22,7 +22,7 @@ public class LogInFilter implements Filter{
 
         HttpSession s = req.getSession();
         if (s.isNew() || s.getAttribute("email") == null) {
-            res.sendRedirect(signInPath);
+            ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
         chain.doFilter(request, response);

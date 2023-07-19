@@ -183,9 +183,11 @@
                             break;
                         case 500: // server error
                             alert("Errore del server");
+                            logout();
                             break;
                         default: // errore generico
                             alert("Errore");
+                            logout();
                             break;
                     }
                 }
@@ -393,8 +395,8 @@
                             break;
                         default:
                             alert("Errore sconosciuto.");
-                            //pageOrchestrator.hide();
-                            //pageOrchestrator.showHome();
+                            pageOrchestrator.hide();
+                            pageOrchestrator.showHome();
                             break;
                     }
             } );
@@ -494,8 +496,8 @@
                                 break;
                             default:
                                 alert("Errore sconosciuto.");
-                                //pageOrchestrator.hide();
-                                //pageOrchestrator.showHome();
+                                pageOrchestrator.hide();
+                                pageOrchestrator.showHome();
                                 break;
                         }
                 } );
@@ -534,6 +536,7 @@
                                 break;
                             default:
                                 alert("Errore sconosciuto.");
+                                home.show();
                                 break;
                         }
                     }
@@ -726,7 +729,7 @@
                         //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il numero di prodotti di quel fornitore
                         for (let [key, value] of carrello) {
                             i++;
-                            if (key == f.fornitore.codiceFornitore) {
+                            if (key === f.fornitore.codiceFornitore) {
                                 let divProd = document.createElement('div');
                                 divProd.textContent = value.quantitaTotaleProdotti.toString();
                                 tdProdottiCarrello.appendChild(divProd);
@@ -925,13 +928,13 @@
                             break;
                         case 500: // server error
                             alert("Errore nel server.\nVerrai riportato alla home.");
-                            //pageOrchestrator.hide();
-                            //pageOrchestrator.showHome();
+                            pageOrchestrator.hide();
+                            pageOrchestrator.showHome();
                             break;
                         default:
                             alert("Errore sconosciuto.");
-                            //pageOrchestrator.hide();
-                            //pageOrchestrator.showHome();
+                            pageOrchestrator.hide();
+                            pageOrchestrator.showHome();
                             break;
                     }
                 }
@@ -1092,8 +1095,8 @@
                                 break;
                             default:
                                 alert("Errore sconosciuto.");
-                                //pageOrchestrator.hide();
-                                //pageOrchestrator.showHome();
+                                pageOrchestrator.hide();
+                                pageOrchestrator.showHome();
                                 break;
                         }
                 } );
