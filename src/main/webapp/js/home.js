@@ -60,7 +60,7 @@
 
         // metodo che inizializza l'oggetto
         this.start = function(){
-            // salvo this in self per colpa della visibilità di js
+            // salvo this in self per poterlo usare dentro le funzioni
             const self = this;
 
             // creo un oggetto-pagina Home
@@ -301,6 +301,7 @@
             let divCenteredRow = document.createElement("div");
             container.appendChild(divCenteredRow);
             divCenteredRow.classList.add("centered-row");
+            //aggiungo la tabella
             let table = document.createElement("table");
             divCenteredRow.appendChild(table);
             let caption = document.createElement("caption");
@@ -452,7 +453,7 @@
         let posizione;
         let word;
 
-        // salvo this in self per colpa della visibilità di js
+        // salvo this in self per poterlo usare nelle funzioni interne
         const self = this;
 
         // questo metodo effettua la ricerca dei risultati
@@ -519,7 +520,7 @@
             if (dettagli.style.display === 'none') {
                 dettagli.style.display = 'block';
 
-                //invio al server che il prodotto è stato visualizzato, solo quando viene espanso, anche se sono contemplati inserimenti multipli dello stesso prodotto nel db
+                //invio al server che il prodotto è stato visualizzato, solo quando viene espanso
                 let call = "codiceProdotto=" + e.target.textContent+"&email="+sessionStorage.getItem("email");
                 makeCall("GET", "Visualizza?"+call, null, function(risposta){
                     if ( risposta.readyState === XMLHttpRequest.DONE ) {
@@ -559,14 +560,12 @@
             let codiceProdotto = form.elements["codiceProdotto"].value;
             let codiceFornitore = form.elements["codiceFornitore"].value;
 
-            form.checkValidity();
-
-            if(quantita < 1 || isNaN(quantita)){
+            //controllo che la richiesta sia corretta
+            if(quantita < 1 || isNaN(quantita) || !form.checkValidity()){
                 alert("Parametro non valido.\nVerrai riportato alla home.");
                 home.show();
                 return;
             }
-
 
 
             let prodottoCarrello = new ProdottoCarrello(quantita, codiceProdotto, codiceFornitore);
@@ -902,11 +901,13 @@
 
 
         }
+        //metodo per mostrare la finestra sovrapposta
         mostraFinestra = function (id) {
             console.log(id + " ");
             let finestra = document.getElementById(id) ;
             finestra.style.display = "block";
         }
+        //metodo per nascondere la finestra sovrapposta
         nascondiFinestra = function (id) {
             let finestra = document.getElementById(id);
             finestra.style.display = "none";
@@ -923,7 +924,7 @@
         // metodo che recupera gli ordini
         this.show = function () {
             container.innerHTML = "";
-            // salvo this in self per colpa della visibilità di js
+            // salvo this in self per poterlo usare dentro la chiamata
             const self = this;
 
             // se presente la divSearch la tolgo
@@ -1028,7 +1029,7 @@
                 let tdCodiceOrdine = document.createElement('td');
                 tdCodiceOrdine.textContent = o.ordine.codiceOrdine;
                 rigaOrdine.appendChild(tdCodiceOrdine);
-                // aggiungo la quantità alla riga
+                // aggiungo il nome fornitore alla riga
                 let tdNomeFornitore = document.createElement('td');
                 tdNomeFornitore.textContent = o.ordine.nomeFornitore
                 rigaOrdine.appendChild(tdNomeFornitore);
