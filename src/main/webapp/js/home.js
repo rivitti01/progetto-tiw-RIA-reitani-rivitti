@@ -379,7 +379,8 @@
                             self.stampaCarrello();
                             break;
                         case 400: // bad request
-                            alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
+                            alert("Carrello non valido, rifiutato dal server.\nIl carrello verrà resettato e verrai riportato alla home.");
+                            sessionStorage.removeItem("carrello");
                             home.show();
                             break;
                         case 401: // unauthorized
@@ -550,6 +551,16 @@
             let quantita = form.elements["quantita"].value;
             let codiceProdotto = form.elements["codiceProdotto"].value;
             let codiceFornitore = form.elements["codiceFornitore"].value;
+
+            form.checkValidity();
+
+            if(quantita < 1 || isNaN(quantita)){
+                alert("Parametro non valido.\nVerrai riportato alla home.");
+                home.show();
+                return;
+            }
+
+
 
             let prodottoCarrello = new ProdottoCarrello(quantita, codiceProdotto, codiceFornitore);
             carrello.aggiungiAlCarrello(prodottoCarrello);
