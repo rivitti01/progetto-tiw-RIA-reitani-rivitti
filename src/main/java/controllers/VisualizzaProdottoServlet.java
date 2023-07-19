@@ -1,8 +1,10 @@
 package controllers;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.ProdottoDAO;
 import dao.UtenteDAO;
@@ -11,6 +13,7 @@ import dao.VisualizzaDAO;
 import java.sql.SQLException;
 
 @WebServlet("/Visualizza")
+@MultipartConfig
 public class VisualizzaProdottoServlet extends ServletPadre {
     public VisualizzaProdottoServlet() {
         super();
@@ -18,7 +21,8 @@ public class VisualizzaProdottoServlet extends ServletPadre {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-        String email = (String) request.getParameter("email");
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
         int codiceProdotto = Integer.parseInt(request.getParameter("codiceProdotto"));
 
         //controllo che i parametri non siano nulli o vuoti

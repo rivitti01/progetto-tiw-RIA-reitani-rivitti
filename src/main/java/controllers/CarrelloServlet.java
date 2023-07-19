@@ -12,6 +12,7 @@ import utils.CarrelloFornitore;
 import utils.ProdottoCarrello;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet("/Carrello")
+@MultipartConfig
 public class CarrelloServlet extends ServletPadre {
 
     public CarrelloServlet() {

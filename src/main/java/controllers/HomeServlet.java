@@ -17,11 +17,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 @WebServlet("/Home")
+@MultipartConfig
 public class HomeServlet extends ServletPadre {
     public HomeServlet() {
         super();

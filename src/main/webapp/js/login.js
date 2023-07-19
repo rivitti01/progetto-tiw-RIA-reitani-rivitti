@@ -1,4 +1,13 @@
+
+
 (function() { // avoid variables ending up in the global scope
+
+    // se quando la pagina carica non sono loggato chiamo logout, altrimenti visualizzo la home
+        if( sessionStorage.getItem("email") != null ){
+            window.location.href = "home.html";
+        }
+
+
 
     document.getElementById("submit").addEventListener('click', (e) => {
         e.preventDefault();

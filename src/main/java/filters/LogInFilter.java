@@ -21,7 +21,7 @@ public class LogInFilter implements Filter{
         String signInPath = req.getServletContext().getContextPath() + "/index.html";
 
         HttpSession s = req.getSession();
-        if (s.isNew() || s.getAttribute("email") == null) {
+        if (s.isNew() || s.getAttribute("email") == null || req.getSession().getAttribute("email") == null || !req.getSession().getAttribute("email").equals(s.getAttribute("email"))) {
             res.sendRedirect(signInPath);
             return;
         }

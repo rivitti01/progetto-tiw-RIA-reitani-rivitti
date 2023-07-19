@@ -12,14 +12,14 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter( urlPatterns = {})
+@WebFilter( urlPatterns = {"/index.html","/"})
 public class NotLoginFilter implements Filter{
 
     //checks that the session is not active; in case it is active, redirect to the Home page
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        String homePath = req.getServletContext().getContextPath() + "/Home";
+        String homePath = req.getServletContext().getContextPath() + "/home.html";
 
         HttpSession s = req.getSession();
         if (!s.isNew() && s.getAttribute("email") != null) {

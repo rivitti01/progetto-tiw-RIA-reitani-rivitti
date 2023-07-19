@@ -1,5 +1,6 @@
 package controllers;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 
 import beans.*;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebServlet("/Ricerca")
+@MultipartConfig
 public class RicercaServlet extends ServletPadre {
     public RicercaServlet() {
         super();

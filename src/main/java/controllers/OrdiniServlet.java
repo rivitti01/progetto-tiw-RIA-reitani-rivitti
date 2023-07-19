@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import dao.OrdineDAO;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/Ordini")
+@MultipartConfig
 public class OrdiniServlet extends ServletPadre {
     public OrdiniServlet() {
         super();
