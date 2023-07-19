@@ -271,7 +271,7 @@
             container.innerHTML = "";
             let self = this;
             let carrello = JSON.parse(sessionStorage.getItem("carrello"));
-            if (carrello == null || carrello.size === 0) {
+            if (carrello == null || carrello.length === 0) {
                 // mostro un messaggio se il carrello è vuoto
                 let span = document.createElement("span");
                 let h1 = document.createElement("h1");
