@@ -247,7 +247,8 @@ public class CreaOrdineServlet extends ServletPadre{
                 connection.rollback();
                 return;
             } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
             }
 
         }

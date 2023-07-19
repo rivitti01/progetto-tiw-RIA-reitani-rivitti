@@ -36,7 +36,8 @@ public class VisualizzaProdottoServlet extends ServletPadre {
                     return;
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
             }
         }
         if (codiceProdotto < 0) {
@@ -49,7 +50,8 @@ public class VisualizzaProdottoServlet extends ServletPadre {
                     return;
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
             }
         }
 
@@ -60,7 +62,7 @@ public class VisualizzaProdottoServlet extends ServletPadre {
             visualizzatoDAO.addVisualized(email, codiceProdotto);
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            throw new RuntimeException(e);
+            return;
         }
 
 
