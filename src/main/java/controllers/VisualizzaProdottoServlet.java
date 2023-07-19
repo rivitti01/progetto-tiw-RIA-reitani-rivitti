@@ -23,7 +23,13 @@ public class VisualizzaProdottoServlet extends ServletPadre {
 
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
-        int codiceProdotto = Integer.parseInt(request.getParameter("codiceProdotto"));
+        int codiceProdotto;
+        try {
+            codiceProdotto = Integer.parseInt(request.getParameter("codiceProdotto"));
+        } catch (NumberFormatException ex) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
         //controllo che i parametri non siano nulli o vuoti
         if (email == null || email.isEmpty()) {

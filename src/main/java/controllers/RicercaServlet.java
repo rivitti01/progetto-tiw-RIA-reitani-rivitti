@@ -36,8 +36,7 @@ public class RicercaServlet extends ServletPadre {
 
         //Verifica che word sia presente
         if (word == null || word.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().println("il campo di ricerca è vuoto");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,"il campo di ricerca è vuoto");
             return;
         }
 
