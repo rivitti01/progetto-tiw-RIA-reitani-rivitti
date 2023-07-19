@@ -581,8 +581,8 @@
             // svuoto la pagina
             this.containter.innerHTML = "";
             // se non ci sono risultati mostro un messaggio
-            if( paginaRisultati.length === 0 ){
-                let p = document.createElement('p');
+            if( paginaRisultati.risultati.length === 0 ){
+                let p = document.createElement('h1');
                 p.textContent = "Nessun risultato per la tua ricerca";
                 this.containter.appendChild(p);
                 return;
