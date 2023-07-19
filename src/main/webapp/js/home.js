@@ -961,14 +961,19 @@
             }
 
             // aggiungo il titolo
-            let h2 = document.createElement('h2');
-            h2.textContent = "Ecco i tuoi ordini:";
-            this.container.appendChild(h2);
+            let h3 = document.createElement('h2');
+            h3.textContent = "Ecco i tuoi ordini:";
+            h3.style.justifyContent = "center";
+            h3.style.display = "flex";
+            this.container.appendChild(h3);
+
 
             // aggiungo il div che conterrà gli ordini
             let divRisultati = document.createElement('div');
+            divRisultati.style.display = "flex";
+            divRisultati.style.justifyContent = "center";
             divRisultati.classList.add("risultati");
-            h2.appendChild(divRisultati);
+            this.container.appendChild(divRisultati);
 
             // aggiungo la lista di ordini
             let listview = document.createElement('ul');
@@ -977,6 +982,8 @@
 
             //aggiungo la tabella con gli ordini
             let table = document.createElement('table');
+            table.style.margin = 0;
+
             listview.appendChild(table);
             let tableHead = document.createElement('thead');
             table.appendChild(tableHead);
@@ -998,6 +1005,8 @@
 
                 // aggiungo una riga per l'ordine alla tabella
                 let rigaOrdine = document.createElement('tr');
+                rigaOrdine.classList.add("separator");
+                rigaOrdine.style.backgroundColor = "lightgrey";
                 tableBody.appendChild(rigaOrdine);
                 // aggiungo il codice ordine alla riga
                 let tdCodiceOrdine = document.createElement('td');
@@ -1022,12 +1031,18 @@
 
                 // creo una riga per il nome delle informazioni
                 let rigaInformazioni = document.createElement('tr');
+                rigaInformazioni.style.textAlign = "center";
                 tableBody.appendChild(rigaInformazioni);
                 // creo una colonna per ogni informazione necessaria
                 let nomiColonneP = ['Prodotti:', 'Quantità:'];
                 for (let i = 0; i < nomiColonneP.length; i++) {
                     let td = document.createElement('td');
                     td.textContent = nomiColonneP[i];
+                    if (nomiColonneP[i] === 'Prodotti:'){
+                        td.colSpan = 4;
+                    }else if(nomiColonneP[i] === 'Quantità:'){
+                        td.colSpan = 1;
+                    }
                     rigaInformazioni.appendChild(td);
                 }
 
@@ -1038,13 +1053,21 @@
                     tableBody.appendChild(rigaProdotto);
                     // aggiungo il nome alla riga
                     let tdNome = document.createElement('td');
+                    tdNome.colSpan = 4;
                     tdNome.textContent = i.nome;
                     rigaProdotto.appendChild(tdNome);
                     // aggiungo la quantita alla riga
                     let tdQuantita = document.createElement('td');
+                    tdQuantita.colSpan = 1;
                     tdQuantita.textContent = i.quantità;
                     rigaProdotto.appendChild(tdQuantita);
                 })
+
+                let trSeparator = document.createElement('tr');
+                tableBody.appendChild(trSeparator);
+                let tdSeparator = document.createElement('td');
+                tdSeparator.colSpan = 5;
+                trSeparator.appendChild(tdSeparator);
 
             })
 
