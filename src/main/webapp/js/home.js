@@ -734,7 +734,7 @@
                         //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il numero di prodotti di quel fornitore
                         for (let [key, value] of carrello) {
                             i++;
-                            if (key === f.fornitore.codiceFornitore) {
+                            if (key == f.fornitore.codiceFornitore) {
                                 let divProd = document.createElement('div');
                                 divProd.textContent = value.quantitaTotaleProdotti.toString();
                                 tdProdottiCarrello.appendChild(divProd);
