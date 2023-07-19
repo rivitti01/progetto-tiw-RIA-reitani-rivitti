@@ -271,7 +271,7 @@
             container.innerHTML = "";
             let self = this;
             let carrello = JSON.parse(sessionStorage.getItem("carrello"));
-            if (carrello == null || carrello.size === 0) {
+            if (carrello == null || carrello.length === 0) {
                 // mostro un messaggio se il carrello è vuoto
                 let span = document.createElement("span");
                 let h1 = document.createElement("h1");
@@ -379,7 +379,8 @@
                             self.stampaCarrello();
                             break;
                         case 400: // bad request
-                            alert("Parametro non valido, rifiutato dal server.\nVerrai riportato alla home.");
+                            alert("Carrello non valido, rifiutato dal server.\nIl carrello verrà resettato e verrai riportato alla home.");
+                            sessionStorage.removeItem("carrello");
                             home.show();
                             break;
                         case 401: // unauthorized
@@ -551,6 +552,16 @@
             let codiceProdotto = form.elements["codiceProdotto"].value;
             let codiceFornitore = form.elements["codiceFornitore"].value;
 
+            form.checkValidity();
+
+            if(quantita < 1 || isNaN(quantita)){
+                alert("Parametro non valido.\nVerrai riportato alla home.");
+                home.show();
+                return;
+            }
+
+
+
             let prodottoCarrello = new ProdottoCarrello(quantita, codiceProdotto, codiceFornitore);
             carrello.aggiungiAlCarrello(prodottoCarrello);
 
@@ -570,8 +581,8 @@
             // svuoto la pagina
             this.containter.innerHTML = "";
             // se non ci sono risultati mostro un messaggio
-            if( paginaRisultati.length === 0 ){
-                let p = document.createElement('p');
+            if( paginaRisultati.risultati.length === 0 ){
+                let p = document.createElement('h1');
                 p.textContent = "Nessun risultato per la tua ricerca";
                 this.containter.appendChild(p);
                 return;
