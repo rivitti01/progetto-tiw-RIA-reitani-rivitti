@@ -607,6 +607,7 @@
             let nomiColonneP = ['Codice','Nome','Prezzo minimo'];
             for( let i=0; i<nomiColonneP.length; i++ ){
                 let th = document.createElement('th');
+                th.colSpan = 3;
                 th.textContent = nomiColonneP[i];
                 tableHeaderRow.appendChild(th);
             }
@@ -623,6 +624,7 @@
 
                 //inserisco il codice del prodotto come bottone per espandere
                 let tdCodice = document.createElement('td');
+                tdCodice.colSpan = 3;
                 tr.appendChild(tdCodice);
                 let bottoneEspandi = document.createElement('button');
                 bottoneEspandi.classList.add("tableButton");
@@ -633,10 +635,12 @@
 
                 //inserisco il nome del prodotto
                 let tdNome = document.createElement('td');
+                tdNome.colSpan = 3;
                 tdNome.textContent = r.prodotto.nomeProdotto;
                 tr.appendChild(tdNome);
                 //inserisco il prezzo minimo
                 let tdPrezzoMinimo = document.createElement('td');
+                tdPrezzoMinimo.colSpan = 3;
                 tdPrezzoMinimo.textContent = r.prezzoMin+"€";
                 tr.appendChild(tdPrezzoMinimo);
 
@@ -648,14 +652,19 @@
 
                 //creo la prima riga
                 let trInfo1 = document.createElement('tr');
+                trInfo1.style.rowspan = 2;
                 tbodyInfo.appendChild(trInfo1);
                 //inserisco la foto
+                let tdFoto = document.createElement('td');
+                tdFoto.style.colspan = 2;
+                trInfo1.appendChild(tdFoto);
                 let img = document.createElement('img');
                 img.src = 'data:image/jpg;base64,' + r.prodotto.fotoBase64;
                 img.classList.add('card-img-top');
-                trInfo1.appendChild(img);
+                tdFoto.appendChild(img);
                 //inserisco le info
                 let tdInfo = document.createElement('td');
+                tdInfo.colSpan = 7;
                 trInfo1.appendChild(tdInfo);
                 //inserisco la categoria
                 let pCategoria = document.createElement('p');
@@ -691,6 +700,7 @@
                 tdPrezzo.textContent = "Prezzo";
                 trTitoli.appendChild(tdPrezzo);
                 let tdAggiungi = document.createElement('td');
+                tdAggiungi.colSpan = 2;
                 tdAggiungi.textContent = "Aggiungi al carrello";
                 trTitoli.appendChild(tdAggiungi);
 
@@ -813,6 +823,7 @@
 
                     //inserisco il form e il bottone per aggiungere al carrello
                     let tdAggiungiCarrello = document.createElement('td');
+                    tdAggiungiCarrello.style.colSpan = "2";
                     trInfo2.appendChild(tdAggiungiCarrello);
                     let formAggiungiCarrello = document.createElement('form');
                     formAggiungiCarrello.classList.add("formCarrello");
