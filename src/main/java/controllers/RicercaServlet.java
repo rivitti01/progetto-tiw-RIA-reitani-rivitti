@@ -88,7 +88,8 @@ public class RicercaServlet extends ServletPadre {
             try {
                 risultato.setFornitori(getFornitoriPerProdotto(risultato.getProdotto().getCodiceProdotto()));
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover products");
+                return;
             }
         }
 

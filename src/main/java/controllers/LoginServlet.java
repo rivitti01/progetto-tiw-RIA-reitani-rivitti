@@ -41,7 +41,7 @@ public class LoginServlet extends ServletPadre {
             checkLogin = checkCredentials(email, password);
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failure in database credential verification");
-            throw new RuntimeException(e);
+            return;
         }
 
         if (checkLogin) {
