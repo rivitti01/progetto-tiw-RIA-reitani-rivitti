@@ -864,7 +864,11 @@
                 let inputPrecedente2 = document.createElement('input');
                 inputPrecedente2.type = "hidden";
                 inputPrecedente2.name = "posizione";
-                inputPrecedente2.value = (-5+parseInt(posizione));
+                if(posizione<5) {
+                    inputPrecedente2.value = 0;
+                } else{
+                    inputPrecedente2.value = (-5 + parseInt(posizione));
+                }
                 formPrecedente.appendChild(inputPrecedente2);
                 let btnPrecedente = document.createElement('button');
                 btnPrecedente.type = "submit";
@@ -890,7 +894,11 @@
                 let inputPrecedente2 = document.createElement('input');
                 inputPrecedente2.type = "hidden";
                 inputPrecedente2.name = "posizione";
-                inputPrecedente2.value = (+5+parseInt(posizione));
+                if(posizione<-5) {
+                    inputPrecedente2.value = 0;
+                } else{
+                    inputPrecedente2.value = (+5+parseInt(posizione));
+                }
                 formSuccessiva.appendChild(inputPrecedente2);
                 let btnPrecedente = document.createElement('button');
                 btnPrecedente.type = "submit";
