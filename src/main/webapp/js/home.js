@@ -210,6 +210,8 @@
 
                     let titoloh1 = document.createElement("h1");
                     titoloh1.textContent = "Potrebbero interessarti!";
+                    titoloh1.style.display = "flex";
+                    titoloh1.style.justifyContent = "center";
                     this.container.appendChild(titoloh1);
 
                     let divContainer = document.createElement('div');
@@ -218,6 +220,8 @@
 
                     //aggiungo la tabella con gli ordini
                     let table = document.createElement('table');
+                    table.style.margin = "auto";
+                    table.style.borderCollapse = "collapse";
                     divContainer.appendChild(table);
                     let tableHead = document.createElement('thead');
                     table.appendChild(tableHead);
@@ -593,6 +597,8 @@
 
             //aggiungo la tabella con i risultati
             let table = document.createElement('table');
+            table.style.margin = "auto";
+            table.style.borderCollapse = "collapse";
             this.containter.appendChild(table);
             let tableHead = document.createElement('thead');
             table.appendChild(tableHead);
@@ -838,12 +844,19 @@
                 })
             })
 
+            let divBottoniPagina = document.createElement('div');
+            divBottoniPagina.classList.add("bottoniPagina");
+            container.appendChild(divBottoniPagina);
+
             //aggiungo se necessario il bottone per tornare alla pagina precedente
             if(posizione>0){
+                let divPrecedente = document.createElement('div');
+                divPrecedente.classList.add("bottonePagina");
+                divBottoniPagina.appendChild(divPrecedente);
                 let formPrecedente = document.createElement('form');
                 formPrecedente.id = "formPrecedente";
                 formPrecedente.action = "#";
-                container.appendChild(formPrecedente);
+                divPrecedente.appendChild(formPrecedente);
                 let inputPrecedente = document.createElement('input');
                 inputPrecedente.type = "hidden";
                 inputPrecedente.name = "word";
@@ -863,10 +876,13 @@
 
             //aggiungo se necessario il bottone per andare alla pagina successiva
             if(!paginaRisultati.ultimaPagina){
+                let divSuccessiva = document.createElement('div');
+                divSuccessiva.classList.add("bottonePagina");
+                divBottoniPagina.appendChild(divSuccessiva);
                 let formSuccessiva = document.createElement('form');
                 formSuccessiva.id = "formPrecedente";
                 formSuccessiva.action = "#";
-                container.appendChild(formSuccessiva);
+                divSuccessiva.appendChild(formSuccessiva);
                 let inputPrecedente = document.createElement('input');
                 inputPrecedente.type = "hidden";
                 inputPrecedente.name = "word";
