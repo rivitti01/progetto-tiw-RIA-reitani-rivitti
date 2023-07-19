@@ -1047,7 +1047,7 @@
                 rigaOrdine.appendChild(tdDataSpedizione);
                 // aggiungo il prezzo totale alla riga
                 let tdPrezzoTotale = document.createElement('td');
-                tdPrezzoTotale.textContent = o.ordine.prezzoTotale;
+                tdPrezzoTotale.textContent = o.ordine.prezzoTotale+"€";
                 rigaOrdine.appendChild(tdPrezzoTotale);
                 // aggiungo l'indirizzo di spedizione alla riga
                 let tdIndirizzoSpedizione = document.createElement('td');
