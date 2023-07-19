@@ -61,7 +61,7 @@ public class LoginServlet extends ServletPadre {
 
         } else {
             // Mostra un messaggio di errore
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Incorrect credentials");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect credentials");
         }
     }
 
