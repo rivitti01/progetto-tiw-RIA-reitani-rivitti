@@ -19,13 +19,14 @@
                         switch (x.status) {
                             case 200:
                                 sessionStorage.setItem('email', message);
+                                sessionStorage.removeItem('carrello');
                                 window.location.href = "home.html";
                                 break;
                             case 400: // bad request
                                 document.getElementById("errormessage").textContent = "Email o password errati";
                                 break;
                             case 401: // unauthorized
-                                document.getElementById("errormessage").textContent = "Email o password errati";
+                                document.getElementById("errormessage").textContent = "Un utente è già loggato nella sessione corrente";
                                 break;
                             case 500: // server error
                                 document.getElementById("errormessage").textContent = "Errore lato server riprovare più tardi";

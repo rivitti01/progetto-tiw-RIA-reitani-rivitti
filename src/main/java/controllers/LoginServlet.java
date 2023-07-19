@@ -28,6 +28,7 @@ public class LoginServlet extends ServletPadre {
         String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
         String error;
 
+        // Controlla che i parametri siano corretti
         if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
             error = "Email e password sono obbligatorie";
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, error);

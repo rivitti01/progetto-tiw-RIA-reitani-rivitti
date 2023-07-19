@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter( urlPatterns = {"/index.html","/"})
+@WebFilter( urlPatterns = {"/Login"})
 public class NotLoginFilter implements Filter{
 
     //checks that the session is not active; in case it is active, redirect to the Home page
@@ -21,11 +21,13 @@ public class NotLoginFilter implements Filter{
         HttpServletResponse res = (HttpServletResponse) response;
         String homePath = req.getServletContext().getContextPath() + "/home.html";
 
-        HttpSession s = req.getSession();
-        if (!s.isNew() && s.getAttribute("email") != null) {
-            res.sendRedirect(homePath);
+        HttpSession session = req.getSession();
+        if (!session.isNew() && session.getAttribute("email") != null) {
+            ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
             return;
+        } else {
+            chain.doFilter(request, response);
         }
-        chain.doFilter(request, response);
     }
 }
