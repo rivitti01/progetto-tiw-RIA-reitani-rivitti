@@ -22,9 +22,9 @@ public class NotLoginFilter implements Filter{
         String homePath = req.getServletContext().getContextPath() + "/home.html";
 
         HttpSession session = req.getSession();
+        //se c'è già un utente collegato con questa sessione, l'utente non effettua il login
         if (!session.isNew() && session.getAttribute("email") != null) {
             ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
             return;
         } else {
             chain.doFilter(request, response);

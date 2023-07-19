@@ -75,7 +75,7 @@ public class CarrelloServlet extends ServletPadre {
         }
 
 
-
+        //accorpo tutti i prodotti uguali con quantità diverse dello stesso fornitore nel carrello per avere un unica riga
         for (int idFornitore : carrello.keySet()) {
             CarrelloFornitore carrelloFornitore = carrello.get(idFornitore);
             for (int i = 0; i < carrelloFornitore.getProdottiCarrello().size(); i++){
@@ -87,7 +87,7 @@ public class CarrelloServlet extends ServletPadre {
                 }
             }
         }
-
+        //elimino le quantità dei prodotti posti a 0 nella fase precedente di accorpamento
         for (int idFornitore : carrello.keySet()){
             CarrelloFornitore carrelloFornitore = carrello.get(idFornitore);
             for (int i = 0; i < carrelloFornitore.getProdottiCarrello().size(); i++){

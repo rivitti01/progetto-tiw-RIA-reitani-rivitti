@@ -36,6 +36,7 @@ public class HomeServlet extends ServletPadre {
         String email = (String) session.getAttribute("email");
         List<Prodotto> products;
         try {
+            //prendo i 5 prodotti visualizzati e/o i prodotti presi a caso dalla categoria di default
             products = getFiveProducts(email);
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover products");
@@ -43,6 +44,7 @@ public class HomeServlet extends ServletPadre {
         }
         for (Prodotto prodotto : products){
             try {
+                //converto il Blob in stringa per essere processata da thymeleaf
                 prodotto.setFotoBase64(Base64.getEncoder().encodeToString(prodotto.getFoto().getBytes(1, (int) prodotto.getFoto().length())));
             } catch (SQLException e) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover products");
@@ -65,8 +67,12 @@ public class HomeServlet extends ServletPadre {
         List<Visualizza> visualizza = null;
         List<Prodotto> prodotti;
         try {
+            //prelevo i 5 risultati visualizzati di recente
             visualizza = visualizzaDAO.getLAstFive(email);
+            //creo una lista di prodotti partendo dal bean visualizza
             prodotti = prodottoDAO.getFiveVisualizedProduct(visualizza);
+
+            //se i prodotti visualizzati sono meno di 5 li completo prendendo prodotti in sconto a caso da una categoria di default
             if (prodotti.size()< Constants.NUMBER_HOME_PRODUCT){
                 prodotti = prodottoDAO.completeListVisualized(prodotti);
             }
