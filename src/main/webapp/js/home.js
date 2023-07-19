@@ -710,8 +710,11 @@
                     let tdProdottiCarrello = document.createElement('td');
                     //verifico che il carrello non sia vuoto
                     if (carrello.size > 0) {
+                        let size = carrello.size;
+                        let i = 0;
                         //itero sulla mappa fino a quando non trovo una key uguale al codice del fornitore per stampare il numero di prodotti di quel fornitore
                         for (let [key, value] of carrello) {
+                            i++;
                             if (key == f.fornitore.codiceFornitore) {
                                 let divProd = document.createElement('div');
                                 divProd.textContent = value.quantitaTotaleProdotti.toString();
@@ -757,7 +760,7 @@
                                     nascondiFinestra(divInfo.id);
                                 }
                                 break;
-                            } else {
+                            } else if(i === size) {
                                 tdProdottiCarrello.textContent = "0";
                             }
                         }

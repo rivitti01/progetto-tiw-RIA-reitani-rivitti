@@ -22,7 +22,10 @@ import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static org.apache.commons.lang.ArrayUtils.indexOf;
 
 @WebServlet("/CreaOrdine")
 public class CreaOrdineServlet extends ServletPadre{
@@ -66,6 +69,42 @@ public class CreaOrdineServlet extends ServletPadre{
         ProdottoDAO prodottoDAO = new ProdottoDAO(connection);
         VendeDAO vendeDAO = new VendeDAO(connection);
         carrello = coppia.getCarrello();
+
+        //controllo che ogni prodotto abbia una quantità maggiore di 0
+        for (int idFornitore : carrello.keySet()){
+            CarrelloFornitore carrelloFornitore = carrello.get(idFornitore);
+            for (int i = 0; i < carrelloFornitore.getProdottiCarrello().size(); i++){
+                if (carrelloFornitore.getProdottiCarrello().get(i).getQuantita() <= 0){
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+            }
+        }
+
+
+        int idFornitoreOrdine = coppia.getCodiceFornitore();
+
+        //accorpo i prodotti uguali settando a 0 la quantità di quelli che non servono
+        CarrelloFornitore carrelloFornitore = carrello.get(idFornitoreOrdine);
+        for (int i = 0; i < carrelloFornitore.getProdottiCarrello().size(); i++){
+            for (int j = 0; j < carrelloFornitore.getProdottiCarrello().size(); j++){
+                if (i != j && carrelloFornitore.getProdottiCarrello().get(i).getCodiceProdotto() == carrelloFornitore.getProdottiCarrello().get(j).getCodiceProdotto()){
+                    carrelloFornitore.getProdottiCarrello().get(i).setQuantita(carrelloFornitore.getProdottiCarrello().get(i).getQuantita() + carrelloFornitore.getProdottiCarrello().get(j).getQuantita());
+                    carrelloFornitore.getProdottiCarrello().get(j).setQuantita(0);
+                }
+            }
+        }
+
+        //rimuovo i prodotti con quantità 0
+        for (int i = 0; i < carrelloFornitore.getProdottiCarrello().size(); i++){
+            if (carrelloFornitore.getProdottiCarrello().get(i).getQuantita() == 0){
+                carrelloFornitore.getProdottiCarrello().remove(i);
+                i--;
+            }
+        }
+
+
+
         // faccio i controlli sul carrello
         try {
             for (int idFornitore : carrello.keySet()) {

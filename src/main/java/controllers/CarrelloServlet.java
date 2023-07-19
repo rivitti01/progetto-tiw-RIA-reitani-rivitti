@@ -61,6 +61,43 @@ public class CarrelloServlet extends ServletPadre {
             return;
         }
 
+        //controllo se ogni quantità sia maggiore di 0
+        for (int idFornitore : carrello.keySet()){
+            CarrelloFornitore carrelloFornitore = carrello.get(idFornitore);
+            for (int i = 0; i < carrelloFornitore.getProdottiCarrello().size(); i++){
+                if (carrelloFornitore.getProdottiCarrello().get(i).getQuantita() <= 0){
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+            }
+        }
+
+
+
+        for (int idFornitore : carrello.keySet()) {
+            CarrelloFornitore carrelloFornitore = carrello.get(idFornitore);
+            for (int i = 0; i < carrelloFornitore.getProdottiCarrello().size(); i++){
+                for (int j = 0; j < carrelloFornitore.getProdottiCarrello().size(); j++){
+                    if (i != j && carrelloFornitore.getProdottiCarrello().get(i).getCodiceProdotto() == carrelloFornitore.getProdottiCarrello().get(j).getCodiceProdotto()){
+                        carrelloFornitore.getProdottiCarrello().get(i).setQuantita(carrelloFornitore.getProdottiCarrello().get(i).getQuantita() + carrelloFornitore.getProdottiCarrello().get(j).getQuantita());
+                        carrelloFornitore.getProdottiCarrello().get(j).setQuantita(0);
+                    }
+                }
+            }
+        }
+
+        for (int idFornitore : carrello.keySet()){
+            CarrelloFornitore carrelloFornitore = carrello.get(idFornitore);
+            for (int i = 0; i < carrelloFornitore.getProdottiCarrello().size(); i++){
+                if (carrelloFornitore.getProdottiCarrello().get(i).getQuantita() == 0){
+                    carrelloFornitore.getProdottiCarrello().remove(i);
+                    i--;
+                }
+            }
+        }
+
+
+
         FornitoreDAO fornitoreDAO = new FornitoreDAO(connection);
         ProdottoDAO prodottoDAO = new ProdottoDAO(connection);
         VendeDAO vendeDAO = new VendeDAO(connection);
