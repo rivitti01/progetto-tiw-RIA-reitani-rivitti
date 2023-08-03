@@ -50,13 +50,14 @@ public class OrdineDAO {
     }
 
     public void createOrder(Ordine ordine) throws SQLException {
-        String query = "INSERT INTO ordini (nome_fornitore, data_spedizione, prezzo_totale, email, indirizzo_spedizione) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ordini (nome_fornitore, codice_fornitore, data_spedizione, prezzo_totale, email, indirizzo_spedizione) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setString(1, ordine.getNomeFornitore());
-            pstatement.setDate(2, ordine.getDataSpedizione());
-            pstatement.setFloat(3, ordine.getPrezzoTotale());
-            pstatement.setString(4, ordine.getEmail());
-            pstatement.setString(5, ordine.getIndirizzoSpedizione());
+            pstatement.setInt(2, ordine.getCodiceFornitore());
+            pstatement.setDate(3, ordine.getDataSpedizione());
+            pstatement.setFloat(4, ordine.getPrezzoTotale());
+            pstatement.setString(5, ordine.getEmail());
+            pstatement.setString(6, ordine.getIndirizzoSpedizione());
             pstatement.executeUpdate();
         }
 

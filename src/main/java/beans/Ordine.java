@@ -4,6 +4,8 @@ import java.sql.Date;
 
 public class Ordine {
     private int codiceOrdine;
+
+    private int codiceFornitore;
     private String nomeFornitore;
     private Date dataSpedizione;
     private float prezzoTotale;
@@ -16,6 +18,14 @@ public class Ordine {
 
     public void setCodiceOrdine(int codiceOrdine) {
         this.codiceOrdine = codiceOrdine;
+    }
+
+    public int getCodiceFornitore() {
+        return codiceFornitore;
+    }
+
+    public void setCodiceFornitore(int codiceFornitore) {
+        this.codiceFornitore = codiceFornitore;
     }
 
     public String getNomeFornitore() {
