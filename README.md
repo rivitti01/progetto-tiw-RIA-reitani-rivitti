@@ -11,9 +11,9 @@ L’applicazione memorizza il contenuto del carrello a lato client.
 Nella pagina RISULTATI l’elenco dettagliato dei prodotti già nel carrello da parte di un fornitore compare mediante una finestra sovrapposta quando si passa con il mouse sopra il numero che indica quanti prodotti del medesimo fornitore sono già nel carrello.
 
 
-## Valutazione finale 28
+## Progetto da 30
 ## Informazioni per il Data Base
-Avviare prima [dbNew.sql](https://github.com/rivitti01/tiwProject/blob/main/dbNew.sql) e successivamente [prodotto.sql](https://github.com/rivitti01/tiwProject/blob/main/prodotto.sql) per creare il db e inserire le foto dei prodotti.
+Aggiungere il file [web.xml](https://github.com/rivitti01/tiwProject/blob/main/src/main/webapp/WEB-INF/web.xml) per puntare al DB nella cartella [WEB-INF](https://github.com/rivitti01/progetto-tiw-RIA-reitani-rivitti/tree/master/src/main/webapp/WEB-INF). Avviare prima [dbNew.sql](https://github.com/rivitti01/tiwProject/blob/main/dbNew.sql) e successivamente [prodotto.sql](https://github.com/rivitti01/tiwProject/blob/main/prodotto.sql) per creare il db e inserire le foto dei prodotti.
 
 ## Componenti del gruppo
 - [__Lorenzo Reitani__](https://github.com/LorenzoReitani)
